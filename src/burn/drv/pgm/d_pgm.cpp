@@ -8055,3 +8055,39 @@ struct BurnDriver BurnDrvkovshpd3dw = {
 	kovassgaInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
 	448, 224, 4, 3
 };
+
+
+// Knights of Valour luan shi ying xiong / 三国战记-血战八方 (Hack, ver. 500)
+// hack (2017, PGM, 448x224)
+
+static struct BurnRomInfo kovlsyxxzbfRomDesc[] = {
+	{ "xzbf_v500cn.rom",		0x0400000, 0x1dd04dc6, 1 | BRF_PRG | BRF_ESS }, //  0 68K Code
+
+	{ "t0600.rom",    		0x0800000, 0xa919ec0f, 2 | BRF_GRA },			//  1 Tile data
+
+	{ "a0600.rom",	   			0x0800000, 0x72643288, 3 | BRF_GRA },			//  2 Sprite Color Data
+	{ "a0601.rom",	   			0x0800000, 0x9c1d1bea, 3 | BRF_GRA }, 	        //  3 
+	{ "a0602.rom",	   		0x0800000, 0x7b437e0f, 3 | BRF_GRA }, 	        //  4
+	
+	{ "b0540.rom",	   		0x0800000, 0x9a295eb6, 4 | BRF_GRA }, 	        //  5
+	{ "b0600.rom",	   			0x0800000, 0x0646c5ef, 4 | BRF_GRA },			//  6 Sprite Masks & Color Indexes
+	{ "b0601.rom",	   		0x0800000, 0x75c127d3, 4 | BRF_GRA },			//  7
+
+	{ "m0600.rom",	   		0x0400000, 0xec3f335d, 5 | BRF_SND },			//  8 Samples
+
+	{ "xzbf_v100_china.asic", 	0x0004000, 0x1e968c13, 7 | BRF_PRG | BRF_ESS },  //  9 Internal ARM7 Rom
+};
+
+STDROMPICKEXT(kovlsyxxzbf, kovlsyxxzbf, pgm)
+STD_ROM_FN(kovlsyxxzbf)
+
+struct BurnDriver BurnDrvkovytzyws = {
+	"kovlsyxxzbf", "kovshp", "pgm", NULL, "2018",
+	"Knights of Valour luan shi ying xiong / 三国战记-血战八方 (2017-0, hack)\0", "Imperfect Protection Emulation", "Hack", "PolyGameMaster",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_BOOTLEG | BDF_HACK, 4, HARDWARE_IGS_PGM | HARDWARE_IGS_USE_ARM_CPU, GBF_SCRFIGHT, 0,
+	NULL, kovytzywsRomInfo, kovytzywsRomName, NULL, NULL, NULL, NULL, pgmInputInfo, kovassgaDIPInfo,  
+	kovshpInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
+	448, 224, 4, 3
+};
+
