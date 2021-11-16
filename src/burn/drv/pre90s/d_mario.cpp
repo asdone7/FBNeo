@@ -589,6 +589,7 @@ static INT32 DrvInit()
 
 	DACInit(0, 0, 1, I8039TotalCycles, 730000);
 	DACSetRoute(0, 0.65, BURN_SND_ROUTE_BOTH);
+	DACDCBlock(1);
 
 	BurnSampleInit(0);
 	BurnSampleSetAllRoutesAllSamples(0.25, BURN_SND_ROUTE_BOTH);
@@ -745,7 +746,6 @@ static INT32 DrvFrame()
 	if (pBurnSoundOut) {
 		BurnSampleRender(pBurnSoundOut, nBurnSoundLen);
 		DACUpdate(pBurnSoundOut, nBurnSoundLen);
-		BurnSoundDCFilter();
 	}
 
 	I8039Close();
@@ -789,7 +789,6 @@ static INT32 MasaoFrame()
 
 	if (pBurnSoundOut) {
 		AY8910Render(pBurnSoundOut, nBurnSoundLen);
-		BurnSoundDCFilter();
 	}
 
 	if (pBurnDraw) {

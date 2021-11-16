@@ -17,6 +17,7 @@
 #include <file/file_path.h>
 
 #include <streams/file_stream.h>
+#include <string/stdstring.h>
 
 #define snprintf_nowarn(...) (snprintf(__VA_ARGS__) < 0 ? abort() : (void)0)
 #define PRINTF_BUFFER_SIZE 512
@@ -73,6 +74,7 @@ INT32 nAudSegLen = 0;
 
 static UINT8* pVidImage = NULL;
 static bool bVidImageNeedRealloc = false;
+static bool bRotationDone = false;
 static int16_t *pAudBuffer = NULL;
 
 // Frameskipping v2 Support
@@ -183,6 +185,14 @@ static INT32 __cdecl libretro_bprintf(INT32 nStatus, TCHAR* szFormat, ...)
 {
 	char buf[PRINTF_BUFFER_SIZE];
 	va_list vp;
+
+	// some format specifiers don't translate well into the retro logs, replace them
+	szFormat = string_replace_substring(szFormat, "%S", "%s");
+
+	// retro logs prefer ending with \n
+	// 2021-10-26: disabled it's causing overflow in a few cases, find a better way to do this...
+	//if (szFormat[strlen(szFormat)-1] != '\n') strncat(szFormat, "\n", 1);
+
 	va_start(vp, szFormat);
 	int rc = vsnprintf(buf, PRINTF_BUFFER_SIZE, szFormat, vp);
 	va_end(vp);
@@ -363,6 +373,7 @@ static int create_variables_from_dipswitches()
 
 			std::replace( option_name.begin(), option_name.end(), ' ', '_');
 			std::replace( option_name.begin(), option_name.end(), '=', '_');
+			std::replace( option_name.begin(), option_name.end(), ':', '_');
 
 			dip_option->option_name = SSTR( "fbneo-dipswitch-" << drvname << "-" << option_name.c_str() );
 
@@ -505,6 +516,13 @@ static bool apply_dipswitches_from_variables()
 	return dip_changed;
 }
 
+static TCHAR* nl_remover(TCHAR* str)
+{
+	TCHAR* tmp = strdup(str);
+	tmp[strcspn(tmp, "\r\n")] = 0;
+	return tmp;
+}
+
 static int create_variables_from_cheats()
 {
 	// Load cheats so that we can turn them into core options, it needs to
@@ -530,11 +548,12 @@ static int create_variables_from_cheats()
 		{
 			cheat_core_options.push_back(cheat_core_option());
 			cheat_core_option *cheat_option = &cheat_core_options.back();
-			std::string option_name = pCurrentCheat->szCheatName;
+			std::string option_name = nl_remover(pCurrentCheat->szCheatName);
 			cheat_option->friendly_name = SSTR( "[Cheat] " << option_name.c_str() );
 			cheat_option->friendly_name_categorized = option_name.c_str();
 			std::replace( option_name.begin(), option_name.end(), ' ', '_');
 			std::replace( option_name.begin(), option_name.end(), '=', '_');
+			std::replace( option_name.begin(), option_name.end(), ':', '_');
 			cheat_option->option_name = SSTR( "fbneo-cheat-" << num << "-" << drvname << "-" << option_name.c_str() );
 			cheat_option->num = num;
 			cheat_option->values.reserve(count);
@@ -544,8 +563,9 @@ static int create_variables_from_cheats()
 				cheat_value->nValue = i;
 				// prepending name with value, some cheats from official pack have 2 values matching default's name,
 				// and picking the wrong one prevents some games to boot
-				cheat_value->friendly_name = SSTR( i << " - " << pCurrentCheat->pOption[i]->szOptionName);
-				if (pCurrentCheat->nDefault == i) cheat_option->default_value = SSTR( i << " - " << pCurrentCheat->pOption[i]->szOptionName);
+				std::string option_value_name = nl_remover(pCurrentCheat->pOption[i]->szOptionName);
+				cheat_value->friendly_name = SSTR( i << " - " << option_value_name.c_str());
+				if (pCurrentCheat->nDefault == i) cheat_option->default_value = SSTR( i << " - " << option_value_name.c_str());
 			}
 		}
 		num++;
@@ -917,7 +937,7 @@ static void SetRotation()
 			rotation = (nVerticalMode == 1 ? 3 : (nVerticalMode == 2 ? 1 : 0));;
 			break;
 	}
-	environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &rotation);
+	bRotationDone = environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &rotation);
 }
 
 #ifdef AUTOGEN_DATS
@@ -1020,7 +1040,9 @@ void retro_deinit()
 void retro_reset()
 {
 	// Saving minimal savestate (handle some machine settings)
-	if (BurnStateSave(g_autofs_path, 0) == 0 && path_is_valid(g_autofs_path))
+	// note : This is only useful to avoid losing nvram when switching from mvs to aes/unibios and resetting,
+	//        it can actually be "harmful" in other games (trackfld)
+	if (is_neogeo_game && BurnStateSave(g_autofs_path, 0) == 0 && path_is_valid(g_autofs_path))
 		HandleMessage(RETRO_LOG_INFO, "[FBNeo] EEPROM succesfully saved to %s\n", g_autofs_path);
 
 	if (pgi_reset)
@@ -1040,7 +1062,8 @@ void retro_reset()
 	ForceFrameStep(1);
 
 	// Loading minimal savestate (handle some machine settings)
-	if (BurnStateLoad(g_autofs_path, 0, NULL) == 0) {
+	if (is_neogeo_game && BurnStateLoad(g_autofs_path, 0, NULL) == 0)
+	{
 		HandleMessage(RETRO_LOG_INFO, "[FBNeo] EEPROM succesfully loaded from %s\n", g_autofs_path);
 		// eeproms are loading nCurrentFrame, but we probably don't want this
 		nCurrentFrame = 0;
@@ -1189,6 +1212,14 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
 	{
 		game_aspect_x = 4;
 		game_aspect_y = 3;
+	}
+
+	// if game is vertical and rotation couldn't occur, "fix" the rotated aspect ratio
+	if ((BurnDrvGetFlags() & BDF_ORIENTATION_VERTICAL) && !bRotationDone)
+	{
+		int temp = game_aspect_x;
+		game_aspect_x = game_aspect_y;
+		game_aspect_y = temp;
 	}
 
 	INT32 oldMax = nGameMaximumGeometry;
@@ -1629,8 +1660,15 @@ static bool retro_load_game_common()
 #endif
 
 		if (!open_archive()) {
+#ifdef INCLUDE_7Z_SUPPORT
 			SetUguiError("This romset is known but yours doesn't match this emulator and its version\nRead https://docs.libretro.com/library/fbneo/#building-romsets-for-fbneo");
+#else
+			SetUguiError("This romset is known but yours doesn't match this emulator and its version\nNote that 7z support is disabled for your platform\nRead https://docs.libretro.com/library/fbneo/#building-romsets-for-fbneo");
+#endif
 			HandleMessage(RETRO_LOG_ERROR, "[FBNeo] This romset is known but yours doesn't match this emulator and its version\n");
+#ifndef INCLUDE_7Z_SUPPORT
+			HandleMessage(RETRO_LOG_ERROR, "[FBNeo] Note that 7z support is disabled for your platform\n");
+#endif
 			HandleMessage(RETRO_LOG_ERROR, "[FBNeo] Read https://docs.libretro.com/library/fbneo/#building-romsets-for-fbneo\n");
 			goto end;
 		}

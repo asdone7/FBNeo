@@ -15591,6 +15591,41 @@ struct BurnDriver BurnDrvmslug4lw = {
 	0x1000,	304, 224, 4, 3
 };
 
+// Metal Slug 4 (20th Anniversary)
+// GOTVG
+
+static struct BurnRomInfo mslug4aRomDesc[] = {
+	{ "263-p1.bin",    0x100000, 0x61cdef09, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+	{ "263-p2.bin",    0x400000, 0xc07e895d, 1 | BRF_ESS | BRF_PRG }, //  1
+
+	{ "263-s1.bin",    0x080000, 0x1eaa05e0, 2 | BRF_GRA },			  //  2 Text layer tiles
+
+	{ "263-c1.rom",	   0x800000, 0xa75ffcde, 3 | BRF_GRA },			  //  3 Sprite data
+	{ "263-c2.rom",	   0x800000, 0x5ab0d12b, 3 | BRF_GRA },			  //  4
+	{ "263-c3.rom",	   0x800000, 0x61af560c, 3 | BRF_GRA },			  //  5
+	{ "263-c4.rom",	   0x800000, 0xf2c544fd, 3 | BRF_GRA },			  //  6
+	{ "263-c5.rom",	   0x800000, 0x84c66c44, 3 | BRF_GRA },			  //  7
+	{ "263-c6.rom",	   0x800000, 0x5ed018ab, 3 | BRF_GRA },			  //  8
+
+	{ "263-m1.bin",    0x020000, 0xef5db532, 4 | BRF_ESS | BRF_PRG }, //  9 Z80 code
+
+	{ "263-v1.bin",	   0x800000, 0xfd6b982e, 5 | BRF_SND }, 			// 10 Sound data
+	{ "263-v2.bin",	   0x800000, 0x20125227, 5 | BRF_SND },			    // 11
+};
+
+STDROMPICKEXT(mslug4a, mslug4a, neogeo)
+STD_ROM_FN(mslug4a)
+
+struct BurnDriver BurnDrvmslug4a = {
+	"mslug4a", "mslug4", "neogeo", NULL, "2017",
+	"Metal Slug 4 (20th Anniversary)\0", NULL, "hack", "Neo Geo",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_RUNGUN, FBF_MSLUG,
+	NULL, mslug4aRomInfo, mslug4aRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
+};
+
 // Metal Slug 5 (bootleg, set 1)
 
 static struct BurnRomInfo mslug5bRomDesc[] = {
@@ -15804,12 +15839,51 @@ STDROMPICKEXT(mslug5w, mslug5w, neogeo)
 STD_ROM_FN(mslug5w)
 
 struct BurnDriver BurnDrvMslug5w = {
-	"mslug5w", "mslug5", "neogeo", NULL, "2003",
+	"mslug5w", "mslug5", "neogeo", NULL, "2016",
 	"Metal Slug 5 (New Campaign, 2016-03-10)\0", NULL, "hack, C.B", "Miscellaneous",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO | HARDWARE_SNK_CMC42, GBF_RUNGUN, FBF_MSLUG,
 	NULL, mslug5wRomInfo, mslug5wRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	s1945pInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
+};
+
+// Metal Slug 5 (New Campaign)
+// GOTVG
+
+static struct BurnRomInfo mslug5wdRomDesc[] = {
+	{ "254-pw1.bin",	0x100000, 0xb0c126da, 1 | BRF_PRG | BRF_ESS }, //  0 68K code
+	{ "254-pw2.bin",	0x400000, 0xf06c589a, 1 | BRF_PRG | BRF_ESS }, //  1
+	
+	{ "268d-s1.rom",    0x020000, 0x64952683, 2 | BRF_GRA },			// 2 Text layer tiles
+
+	{ "268d-c1.rom",	0x800000, 0xe8239365, 3 | BRF_GRA },           //  2 Sprite data
+	{ "268d-c2.rom",	0x800000, 0x89b21d4c, 3 | BRF_GRA },           //  3
+	{ "268d-c3.rom",	0x800000, 0x3cda13a0, 3 | BRF_GRA },           //  4
+	{ "268d-c4.rom",	0x800000, 0x9c00160d, 3 | BRF_GRA },           //  5
+	{ "ms5n_c5.rom",	0x800000, 0x483a986c, 3 | BRF_GRA },           //  6
+	{ "ms5n_c6.rom",	0x800000, 0xd918f796, 3 | BRF_GRA },           //  7
+	{ "ms5n_c7.rom",	0x800000, 0xbdb9a887, 3 | BRF_GRA },           //  8
+	{ "ms5n_c8.rom",	0x800000, 0x6f8ac6fb, 3 | BRF_GRA },           //  9
+
+	{ "254-m1.bin",     0x080000, 0x464c72ad, 4 | BRF_ESS | BRF_PRG }, // 10 Z80 code
+
+	{ "254-v1.bin",		0x400000, 0xa8e12a92, 5 | BRF_SND },           // 11 Sound data
+	{ "254-v2.bin",		0x400000, 0x0608cba3, 5 | BRF_SND },           // 12
+	{ "254-v3.bin",		0x400000, 0x02fd519e, 5 | BRF_SND },           // 13
+	{ "254-v4.bin",		0x4002f0, 0x179cbca3, 5 | BRF_SND },           // 14
+};
+
+STDROMPICKEXT(mslug5wd, mslug5wd, neogeo)
+STD_ROM_FN(mslug5wd)
+
+struct BurnDriver BurnDrvmslug5wd = {
+	"mslug5wd", "mslug5", "neogeo", NULL, "2016",
+	"Metal Slug 5 (New Campaign)\0", NULL, "hack", "Neo Geo MVS",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_RUNGUN, FBF_MSLUG,
+	NULL, mslug5wdRomInfo, mslug5wdRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
 	0x1000,	304, 224, 4, 3
 };
 
@@ -17944,6 +18018,44 @@ struct BurnDriver BurnDrvkof98cps = {
 	NULL, kof98cpsRomInfo, kof98cpsRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	kof98cpsInit, kof98cpsExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
 	0x1000,	304, 224, 4, 3
+};
+
+// The King of Fighters '98 (Ratio hack)
+
+static struct BurnRomInfo kof98ratioRomDesc[] = {
+	{ "242-ratio.p1", 0x100000, 0x9171669d, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+	{ "242-p2.sp2",   0x400000, 0x980aba4c, 1 | BRF_ESS | BRF_PRG }, //  1
+
+	{ "242-s1.s1",    0x020000, 0x7f7b4805, 2 | BRF_GRA },           //  2 Text layer tiles
+
+	{ "242-c1.c1",    0x800000, 0xe564ecd6, 3 | BRF_GRA },           //  3 Sprite data
+	{ "242-c2.c2",    0x800000, 0xbd959b60, 3 | BRF_GRA },           //  4
+	{ "242-c3.c3",    0x800000, 0x22127b4f, 3 | BRF_GRA },           //  5
+	{ "242-c4.c4",    0x800000, 0x0b4fa044, 3 | BRF_GRA },           //  6
+	{ "242-c5.c5",    0x800000, 0x9d10bed3, 3 | BRF_GRA },           //  7
+	{ "242-c6.c6",    0x800000, 0xda07b6a2, 3 | BRF_GRA },           //  8
+	{ "242-c7.c7",    0x800000, 0xf6d7a38a, 3 | BRF_GRA },           //  9
+	{ "242-c8.c8",    0x800000, 0xc823e045, 3 | BRF_GRA },           // 10
+
+	{ "242-mg1.m1",   0x040000, 0x4e7a6b1b, 4 | BRF_ESS | BRF_PRG }, // 11 Z80 code
+
+	{ "242-v1.v1",    0x400000, 0xb9ea8051, 5 | BRF_SND },           // 12 Sound data
+	{ "242-v2.v2",    0x400000, 0xcc11106e, 5 | BRF_SND },           // 13
+	{ "242-v3.v3",    0x400000, 0x044ea4e1, 5 | BRF_SND },           // 14
+	{ "242-v4.v4",    0x400000, 0x7985ea30, 5 | BRF_SND },           // 15
+};
+
+STDROMPICKEXT(kof98ratio, kof98ratio, neogeo)
+STD_ROM_FN(kof98ratio)
+
+struct BurnDriver BurnDrvKof98ratio = {
+	"kof98ratio", "kof98", "neogeo", NULL, "2021",
+	"The King of Fighters '98 (Ratio hack)\0", NULL, "bankbank", "Neo Geo MVS",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
+	NULL, kof98ratioRomInfo, kof98ratioRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000, 304, 224, 4, 3
 };
 
 // The King of Fighters '99 Anniversary Edition
@@ -20663,7 +20775,7 @@ struct BurnDriver BurnDrvNblktiger = {
 	0x1000, 304, 224, 4, 3
 };
 
-// The Eye of Typhoon Demo
+// The Eye of Typhoon (Alpha Version)
 // https://ozzyouzo.itch.io/teot
 
 static struct BurnRomInfo teotRomDesc[] = {
@@ -20690,7 +20802,7 @@ STD_ROM_FN(teot)
 
 struct BurnDriver BurnDrvTeot = {
 	"teot", NULL, "neogeo", NULL, "2021",
-	"The Eye of Typhoon Demo\0", NULL, "OzzyOuzo", "Neo Geo MVS",
+	"The Eye of Typhoon (Alpha Version)\0", NULL, "OzzyOuzo", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_HOMEBREW | BDF_DEMO, 1, HARDWARE_SNK_NEOGEO, GBF_PLATFORM, 0,
 	NULL, teotRomInfo, teotRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neoaesjapanDIPInfo,
@@ -20698,11 +20810,10 @@ struct BurnDriver BurnDrvTeot = {
 	0x1000, 304, 224, 4, 3
 };
 
-
-// Cabal (Neo-Geo Unfinished Conversion)
+// Cabal (Neo-Geo Conversion, beta 2)
 
 static struct BurnRomInfo cabalngRomDesc[] = {
-	{ "cabal-p1.bin",   0x100000, 0x49232965, 1 | BRF_ESS | BRF_PRG }, 	//  0 68K code
+	{ "cabal-p1.bin",   0x100000, 0xbb193926, 1 | BRF_ESS | BRF_PRG }, 	//  0 68K code
 
 	{ "cabal-s1.bin",	0x020000, 0x45f0bc5e, 2 | BRF_GRA },           	//  1 Text layer tiles
 
@@ -20720,7 +20831,7 @@ STD_ROM_FN(cabalng)
 
 struct BurnDriver BurnDrvCabalng = {
 	"cabalng", NULL, "neogeo", NULL, "1988",
-	"Cabal (Neo-Geo Unfinished Conversion)\0", "Buggy, works in MVS mode only!", "TAD Corporation", "Neo Geo MVS",
+	"Cabal (Neo-Geo Conversion, beta 2)\0", "Buggy, works in MVS mode only!", "TAD Corporation", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_PLATFORM, 0,
 	NULL, cabalngRomInfo, cabalngRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
