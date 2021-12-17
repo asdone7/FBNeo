@@ -20863,7 +20863,7 @@ STD_ROM_FN(samsho3bt)
 struct BurnDriver BurnDrvsamsho3bt = {
 	"samsho3bt", "samsho3", "neogeo", NULL, "1995",
 	"侍魂3 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
-	NULL, NULL, NULL, NULL,
+	L"Samurai Shodown III\0\u30B5\u30E0\u30E9\u30A4\u30B9\u30D4\u30EA\u30C3\u30C4 - \u65AC\u7D05\u90CE\u7121\u53CC\u5263 (NGH-087)\0", NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
 	NULL, samsho3btRomInfo, samsho3btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
@@ -20901,10 +20901,10 @@ struct BurnDriver BurnDrvsamsho4bt = {
 	"samsho4bt", "samsho4", "neogeo", NULL, "1996",
 	"侍魂4 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
-	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
+	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
 	NULL, samsho4btRomInfo, samsho4btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
-	0x1000, 304, 224, 4, 3
+	0x1000, 320, 224, 4, 3
 };
 
 // 侍魂5 BOSS版
@@ -20938,10 +20938,10 @@ struct BurnDriver BurnDrvsamsho5bt = {
 	"samsho5bt", "samsho5", "neogeo", NULL, "2003",
 	"侍魂5 BOSS版\0", NULL, "bootleg", "Neo Geo",
 	NULL, NULL, NULL, NULL,
-	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
 	NULL, samsho5btRomInfo, samsho5btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
-	0x1000, 304, 224, 4, 3
+	0x1000,	304, 224, 4, 3
 };
 
 // 侍魂 BOSS版
@@ -20973,10 +20973,10 @@ struct BurnDriver BurnDrvsamshobt = {
 	"samshobt", "samsho", "neogeo", NULL, "1993",
 	"侍魂 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
-	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
+	BDF_GAME_WORKING, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
 	NULL, samshobtRomInfo, samshobtRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
-	0x1000, 304, 224, 4, 3
+	0x1000, 320, 224, 4, 3
 };
 
 // 侍魂5 解密版
@@ -21007,42 +21007,8 @@ struct BurnDriver BurnDrvsamsh5nd = {
 	"samsh5nd", "samsho5", "neogeo", NULL, "2003",
 	"侍魂5 解密版\0", NULL, "Yuki Enterprise / SNK Playmore", "Neo Geo",
 	NULL, NULL, NULL, NULL,
-	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
 	NULL, samsh5ndRomInfo, samsh5ndRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
-	0x1000, 304, 224, 4, 3
-};
-
-// 侍魂5 特别版 解密版
-
-static struct BurnRomInfo sam5spndRomDesc[] = {
-	{ "272-p1.p1",   0x400000, 0xfb7a6bba, 1 | BRF_ESS | BRF_PRG },
-	{ "272-p2.sp2",   0x400000, 0x63492ea6, 1 | BRF_ESS | BRF_PRG },
-
-	{ "272-c1d.c1", 0x800000, 0x8548097e, 3 | BRF_GRA },
-	{ "272-c2d.c2", 0x800000, 0x8c1b48d0, 3 | BRF_GRA },
-	{ "272-c3d.c3", 0x800000, 0x96ddb28c, 3 | BRF_GRA },
-	{ "272-c4d.c4", 0x800000, 0x99ef7a0a, 3 | BRF_GRA },
-	{ "272-c5d.c5", 0x800000, 0x772e8b1e, 3 | BRF_GRA },
-	{ "272-c6d.c6", 0x800000, 0x5fff21fc, 3 | BRF_GRA },
-	{ "272-c7d.c7", 0x800000, 0x9ac56a0e, 3 | BRF_GRA },
-	{ "272-c8d.c8", 0x800000, 0xcfde7aff, 3 | BRF_GRA },
-
-	{ "272-m1.m1",   0x080000, 0xadeebf40, 4 | BRF_ESS | BRF_PRG },
-
-	{ "272-v1.v1",   0x800000, 0x76a94127, 5 | BRF_SND },
-	{ "272-v2.v2",   0x800000, 0x4ba507f1, 5 | BRF_SND },
-};
-
-STDROMPICKEXT(sam5spnd, sam5spnd, neogeo)
-STD_ROM_FN(sam5spnd)
-
-struct BurnDriver BurnDrvsam5spnd = {
-	"sam5spnd", "samsh5sp", "neogeo", NULL, "2003",
-	"// 侍魂5 特别版 解密版\0", NULL, "Yuki Enterprise / SNK Playmore", "Neo Geo",
-	NULL, NULL, NULL, NULL,
-	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
-	NULL, sam5spndRomInfo, sam5spndRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
-	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
-	0x1000, 304, 224, 4, 3
+	0x1000,	304, 224, 4, 3
 };
