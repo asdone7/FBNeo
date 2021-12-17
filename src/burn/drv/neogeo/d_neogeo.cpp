@@ -20833,3 +20833,216 @@ struct BurnDriver BurnDrvkof97cto2sp = {
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
 	0x1000, 304, 224, 4, 3
 };
+
+// 侍魂3 BOSS版
+
+static struct BurnRomInfo samsho3btRomDesc[] = {
+	{ "087-pg1.p1",   0x100000, 0x282a336e, 1 | BRF_ESS | BRF_PRG }, //  0 68K code			/ mask rom TC538200
+	{ "087-p2.sp2",   0x200000, 0x9bbe27e0, 1 | BRF_ESS | BRF_PRG }, //  1 					/ mask rom TC5316200
+
+	{ "087-s1.s1",    0x020000, 0x74ec7d9f, 2 | BRF_GRA },           //  2 Text layer tiles / TC531000
+
+	{ "087-c1.c1",    0x400000, 0x07a233bc, 3 | BRF_GRA },           //  3 Sprite data		/ TC5332202
+	{ "087-c2.c2",    0x400000, 0x7a413592, 3 | BRF_GRA },           //  4 					/ TC5332202
+	{ "087-c3.c3",    0x400000, 0x8b793796, 3 | BRF_GRA },           //  5 					/ TC5332202
+	{ "087-c4.c4",    0x400000, 0x728fbf11, 3 | BRF_GRA },           //  6 					/ TC5332202
+	{ "087-c5.c5",    0x400000, 0x172ab180, 3 | BRF_GRA },           //  7 					/ TC5332202
+	{ "087-c6.c6",    0x400000, 0x002ff8f3, 3 | BRF_GRA },           //  8 					/ TC5332202
+	{ "087-c7.c7",    0x100000, 0xae450e3d, 3 | BRF_GRA },           //  9 					/ TC538200
+	{ "087-c8.c8",    0x100000, 0xa9e82717, 3 | BRF_GRA },           // 10 					/ TC538200
+
+	{ "087-m1.m1",    0x020000, 0x8e6440eb, 4 | BRF_ESS | BRF_PRG }, // 11 Z80 code			/ TC531001
+
+	{ "087-v1.v1",    0x400000, 0x84bdd9a0, 5 | BRF_SND },           // 12 Sound data		/ TC5332201
+	{ "087-v2.v2",    0x200000, 0xac0f261a, 5 | BRF_SND },           // 13 					/ TC5316200
+};
+
+STDROMPICKEXT(samsho3bt, samsho3bt, neogeo)
+STD_ROM_FN(samsho3bt)
+
+struct BurnDriver BurnDrvsamsho3bt = {
+	"samsho3bt", "samsho3", "neogeo", NULL, "1995",
+	"侍魂3 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
+	L"Samurai Shodown III\0\u30B5\u30E0\u30E9\u30A4\u30B9\u30D4\u30EA\u30C3\u30C4 - \u65AC\u7D05\u90CE\u7121\u53CC\u5263 (NGH-087)\0", NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO,  GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, samsho3btRomInfo, samsho3btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000, 304, 224, 4, 3
+};
+
+// 侍魂4 BOSS版
+
+static struct BurnRomInfo samsho4btRomDesc[] = {
+	{ "222-p1k.p1",   0x100000, 0x06e0a25d, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+	{ "222-p2.sp2",   0x400000, 0xb023cd8b, 1 | BRF_ESS | BRF_PRG }, //  1 					/* TC5332205 */
+
+	{ "222-s1k.s1",   0x020000, 0xd313687d, 2 | BRF_GRA },           //  2 Text layer tiles
+
+	{ "222-c1.c1",    0x400000, 0x68f2ed95, 3 | BRF_GRA },           //  3 Sprite data		/* TC5332205 */
+	{ "222-c2.c2",    0x400000, 0xa6e9aff0, 3 | BRF_GRA },           //  4 					/* TC5332205 */
+	{ "222-c3.c3",    0x400000, 0xc91b40f4, 3 | BRF_GRA },           //  5 					/* TC5332205 */
+	{ "222-c4.c4",    0x400000, 0x359510a4, 3 | BRF_GRA },           //  6 					/* TC5332205 */
+	{ "222-c5.c5",    0x400000, 0x9cfbb22d, 3 | BRF_GRA },           //  7 					/* TC5332205 */
+	{ "222-c6.c6",    0x400000, 0x685efc32, 3 | BRF_GRA },           //  8 					/* TC5332205 */
+	{ "222-c7.c7",    0x400000, 0xd0f86f0d, 3 | BRF_GRA },           //  9 					/* TC5332205 */
+	{ "222-c8.c8",    0x400000, 0xadfc50e3, 3 | BRF_GRA },           // 10 					/* TC5332205 */
+
+	{ "222-m1.m1",    0x020000, 0x7615bc1b, 4 | BRF_ESS | BRF_PRG }, // 11 Z80 code			/* TC531001 */
+
+	{ "222-v1.v1",    0x400000, 0x7d6ba95f, 5 | BRF_SND },           // 12 Sound data		/* TC5332204 */
+	{ "222-v2.v2",    0x400000, 0x6c33bb5d, 5 | BRF_SND },           // 13 					/* TC5332204 */
+	{ "222-v3.v3",    0x200000, 0x831ea8c0, 5 | BRF_SND },           // 14 					/* TC5316200 */
+};
+
+STDROMPICKEXT(samsho4bt, samsho4bt, neogeo)
+STD_ROM_FN(samsho4bt)
+
+struct BurnDriver BurnDrvsamsho4bt = {
+	"samsho4bt", "samsho4", "neogeo", NULL, "1996",
+	"侍魂4 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, samsho4btRomInfo, samsho4btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000, 320, 224, 4, 3
+};
+
+// 侍魂5 BOSS版
+
+static struct BurnRomInfo samsho5btRomDesc[] = {
+	{ "ssv-p1d.bin", 0x800000, 0x611a6687, 1 | BRF_ESS | BRF_PRG },
+
+	{ "ssv-s1d.bin", 0x020000, 0x33227d62, 2 | BRF_GRA },
+
+	{ "ssv-c1d.bin", 0x800000, 0x4e7bdea1, 3 | BRF_GRA },
+	{ "ssv-c2d.bin", 0x800000, 0x7b444985, 3 | BRF_GRA },
+	{ "ssv-c3d.bin", 0x800000, 0x8c709a9b, 3 | BRF_GRA },
+	{ "ssv-c4d.bin", 0x800000, 0xcfd53f5c, 3 | BRF_GRA },
+	{ "ssv-c5d.bin", 0x800000, 0xc026d318, 3 | BRF_GRA },
+	{ "ssv-c6d.bin", 0x800000, 0xb3d9d204, 3 | BRF_GRA },
+	{ "ssv-c7d.bin", 0x800000, 0xfe03a025, 3 | BRF_GRA },
+	{ "ssv-c8d.bin", 0x800000, 0x89db2d34, 3 | BRF_GRA },
+
+	{ "ssv-m1.bin",  0x020000, 0x18114fb1, 4 | BRF_ESS | BRF_PRG },
+
+	{ "ssv-v1d.bin", 0x400000, 0x6849136c, 5 | BRF_SND },
+	{ "ssv-v2d.bin", 0x400000, 0x222e1774, 5 | BRF_SND },
+	{ "ssv-v3d.bin", 0x400000, 0xcd9e7adc, 5 | BRF_SND },
+	{ "ssv-v4d.bin", 0x400000, 0x8b305cac, 5 | BRF_SND },
+};
+
+STDROMPICKEXT(samsho5bt, samsho5bt, neogeo)
+STD_ROM_FN(samsho5bt)
+
+struct BurnDriver BurnDrvsamsho5bt = {
+	"samsho5bt", "samsho5", "neogeo", NULL, "2003",
+	"侍魂5 BOSS版\0", NULL, "bootleg", "Neo Geo",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, samsho5btRomInfo, samsho5btRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
+};
+
+// 侍魂 BOSS版
+
+static struct BurnRomInfo samshobtRomDesc[] = {
+	{ "045-p1.p1",    0x080000, 0xdfe51bf0, 1 | BRF_ESS | BRF_PRG }, //  0 68K code 	
+	{ "045-pg2.sp2",  0x080000, 0x46745b94, 1 | BRF_ESS | BRF_PRG }, //  1 				
+	{ "045-p3.bin",   0x080000, 0x38ee9ba9, 1 | BRF_ESS | BRF_PRG }, //  2 	
+
+	{ "045-s1.s1",    0x020000, 0x9142a4d3, 2 | BRF_GRA },           //  3 Text layer tiles / TC531000
+
+	{ "045-c1.c1",    0x200000, 0x2e5873a4, 3 | BRF_GRA },           //  4 Sprite data 		/ TC5316200
+	{ "045-c2.c2",    0x200000, 0x04febb10, 3 | BRF_GRA },           //  5 					/ TC5316200
+	{ "045-c3.c3",    0x200000, 0xf3dabd1e, 3 | BRF_GRA },           //  6 					/ TC5316200
+	{ "045-c4.c4",    0x200000, 0x935c62f0, 3 | BRF_GRA },           //  7 					/ TC5316200
+	{ "045-c51.c5",   0x080000, 0xa2bb8284, 3 | BRF_GRA },           //  8 					/ TC538200
+	{ "045-c61.c6",   0x080000, 0x4fa71252, 3 | BRF_GRA },           //  9 					/ TC538200
+
+	{ "045-m1.m1",    0x020000, 0x95170640, 4 | BRF_ESS | BRF_PRG }, //  10 Z80 code 		/ TC531001
+
+	{ "045-v1.v1",    0x200000, 0x37f78a9b, 5 | BRF_SND },           // 11 Sound data 		/ TC5316200
+	{ "045-v2.v2",    0x200000, 0x568b20cf, 5 | BRF_SND },           // 12 					/ TC5316200
+};
+
+STDROMPICKEXT(samshobt, samshobt, neogeo)
+STD_ROM_FN(samshobt)
+
+struct BurnDriver BurnDrvsamshobt = {
+	"samshobt", "samsho", "neogeo", NULL, "1993",
+	"侍魂 BOSS版\0", NULL, "SNK", "Neo Geo MVS",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, samshobtRomInfo, samshobtRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000, 320, 224, 4, 3
+};
+
+// 侍魂5 解密版
+
+static struct BurnRomInfo samsh5ndRomDesc[] = {
+	{ "270-p1.p1",   0x400000, 0x4a2a09e6, 1 | BRF_ESS | BRF_PRG },
+	{ "270-p2.sp2",   0x400000, 0xe0c74c85, 1 | BRF_ESS | BRF_PRG },
+
+	{ "270-c1d.c1", 0x800000, 0x9adec562, 3 | BRF_GRA },
+	{ "270-c2d.c2", 0x800000, 0xac0309e5, 3 | BRF_GRA },
+	{ "270-c3d.c3", 0x800000, 0x82db9dae, 3 | BRF_GRA },
+	{ "270-c4d.c4", 0x800000, 0xf8041153, 3 | BRF_GRA },
+	{ "270-c5d.c5", 0x800000, 0xe689d62d, 3 | BRF_GRA },
+	{ "270-c6d.c6", 0x800000, 0xa993bdcf, 3 | BRF_GRA },
+	{ "270-c7d.c7", 0x800000, 0x707d56a0, 3 | BRF_GRA },
+	{ "270-c8d.c8", 0x800000, 0xf5903adc, 3 | BRF_GRA },
+
+	{ "270-m1.m1",   0x080000, 0x49c9901a, 4 | BRF_ESS | BRF_PRG },
+
+	{ "270-v1.v1",   0x800000, 0x62e434eb, 5 | BRF_SND },
+	{ "270-v2.v2",   0x800000, 0x180f3c9a, 5 | BRF_SND },
+};
+
+STDROMPICKEXT(samsh5nd, samsh5nd, neogeo)
+STD_ROM_FN(samsh5nd)
+
+struct BurnDriver BurnDrvsamsh5nd = {
+	"samsh5nd", "samsho5", "neogeo", NULL, "2003",
+	"侍魂5 解密版\0", NULL, "Yuki Enterprise / SNK Playmore", "Neo Geo",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, samsh5ndRomInfo, samsh5ndRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
+};
+
+// 侍魂5 特别版 解密版
+
+static struct BurnRomInfo sam5spndRomDesc[] = {
+	{ "272-p1.p1",   0x400000, 0xfb7a6bba, 1 | BRF_ESS | BRF_PRG },
+	{ "272-p2.sp2",   0x400000, 0x63492ea6, 1 | BRF_ESS | BRF_PRG },
+
+	{ "272-c1d.c1", 0x800000, 0x8548097e, 3 | BRF_GRA },
+	{ "272-c2d.c2", 0x800000, 0x8c1b48d0, 3 | BRF_GRA },
+	{ "272-c3d.c3", 0x800000, 0x96ddb28c, 3 | BRF_GRA },
+	{ "272-c4d.c4", 0x800000, 0x99ef7a0a, 3 | BRF_GRA },
+	{ "272-c5d.c5", 0x800000, 0x772e8b1e, 3 | BRF_GRA },
+	{ "272-c6d.c6", 0x800000, 0x5fff21fc, 3 | BRF_GRA },
+	{ "272-c7d.c7", 0x800000, 0x9ac56a0e, 3 | BRF_GRA },
+	{ "272-c8d.c8", 0x800000, 0xcfde7aff, 3 | BRF_GRA },
+
+	{ "272-m1.m1",   0x080000, 0xadeebf40, 4 | BRF_ESS | BRF_PRG },
+
+	{ "272-v1.v1",   0x800000, 0x76a94127, 5 | BRF_SND },
+	{ "272-v2.v2",   0x800000, 0x4ba507f1, 5 | BRF_SND },
+};
+
+STDROMPICKEXT(sam5spnd, sam5spnd, neogeo)
+STD_ROM_FN(sam5spnd)
+
+struct BurnDriver BurnDrvsam5spnd = {
+	"sam5spnd", "samsh5sp", "neogeo", NULL, "2003",
+	"// 侍魂5 特别版 解密版\0", NULL, "Yuki Enterprise / SNK Playmore", "Neo Geo",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO | HARDWARE_SNK_ENCRYPTED_M1, GBF_VSFIGHT, FBF_SAMSHO,
+	NULL, sam5spndRomInfo, sam5spndRomName, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	samsh5spInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000, 304, 224, 4, 3
+};
