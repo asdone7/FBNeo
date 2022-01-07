@@ -8422,3 +8422,36 @@ struct BurnDriver BurnDrvkovpls = {
 	kovInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
 	448, 224, 4, 3
 };
+
+// 三国战记2012 无双经典版 (hack)
+
+static struct BurnRomInfo kovplus2012dRomDesc[] = {
+	{ "p2012dw.119",		0x0400000, 0xd40fdda6, 1 | BRF_PRG | BRF_ESS }, //  0 68K Code
+
+	{ "t0600.rom",			0x0800000, 0x842b7711, 2 | BRF_GRA },			//  1 Tile data
+	
+	{ "a0600.rom",			0x0800000, 0x5bd7ea9f, 3 | BRF_GRA },			//  2 Sprite Color Data
+	{ "a0601.rom",			0x0800000, 0xff7a4373, 3 | BRF_GRA },			//  3
+	{ "a0602.rom",			0x0800000, 0x899a0596, 3 | BRF_GRA },			//  4
+	{ "a0603.rom",			0x0400000, 0xec31abda, 3 | BRF_GRA },			//  5
+	
+	{ "b0600.rom",			0x0800000, 0x07d91ea3, 4 | BRF_GRA },			//  6 Sprite Masks & Color Indexes
+	{ "b0601.rom",			0x0400000, 0x10e4f375, 4 | BRF_GRA },			//  7
+	
+	{ "m0600.rom",			0x0400000, 0x7a50501b, 5 | BRF_SND },			//  8 Samples
+	
+	{ "kov_igs027a.bin",			0x0004000, 0x00000000, 7 | BRF_PRG | BRF_ESS | BRF_NODUMP },  //  9 Internal ARM7 Rom
+};
+
+STDROMPICKEXT(kovplus2012d, kovplus2012d, pgm)
+STD_ROM_FN(kovplus2012d)
+
+struct BurnDriver BurnDrvkovplus2012d = {
+	"kovplus2012d", "kovplus", "pgm", NULL, "2021",
+	"三国战记2012 无双经典版 (hack)\0", NULL, "Hack", "PolyGameMaster",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 4, HARDWARE_IGS_PGM, GBF_SCRFIGHT, 0,
+	NULL, kovplus2012dRomInfo, kovplus2012dRomName, NULL, NULL, NULL, NULL, pgmInputInfo, kovassgaDIPInfo,
+        kovInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
+	448, 224, 4, 3
+};
