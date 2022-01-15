@@ -20728,8 +20728,7 @@ struct BurnDriver BurnDrvCabalng = {
 	0x1000, 304, 224, 4, 3
 };
 
-
-// The King of Fighters '97 Plus2020 (hack)
+// 拳皇 '97 终极之战Plus2020 修正版 (hack)
 
 static struct BurnRomInfo kof97cto23fRomDesc[] = {
 	{ "232cto-p1.bin",  0x100000, 0xb8ef4348, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
@@ -20756,7 +20755,7 @@ STD_ROM_FN(kof97cto23f)
 
 struct BurnDriver BurnDrvkof97cto23f = {
 	"kof97cto23f", "kof97", "neogeo", NULL, "1997",
-	"The King of Fighters '97 Plus2020 (hack)\0", NULL, "hack", "Neo Geo MVS",
+	"拳皇 '97 终极之战Plus2020 修正版  (hack)\0", NULL, "hack", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_CLONE | BDF_BOOTLEG, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
 	NULL, kof97cto23fRomInfo, kof97cto23fRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
@@ -20764,34 +20763,34 @@ struct BurnDriver BurnDrvkof97cto23f = {
 	0x1000, 304, 224, 4, 3
 };
 
-// The King of Fighters '97 Plus2020max (hack)
+// 拳皇 '97 终极之战金蛇版 (hack)
 
 static struct BurnRomInfo kof97cto231RomDesc[] = {
 	{ "232cto-p1.bin",  0x100000, 0x3caada4d, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
 	{ "232cto-p2.bin",  0x400000, 0x3f8118f6, 1 | BRF_ESS | BRF_PRG }, //  1
 
-	{ "232-s1.s1",    0x020000, 0x0016c83a, 2 | BRF_GRA },           //  2 Text layer tiles
+	{ "232-s1.bin",    0x020000, 0x0016c83a, 2 | BRF_GRA },           //  2 Text layer tiles
 
-	{ "232-c1.c1",    0x800000, 0xe1b11416, 3 | BRF_GRA },           //  3 Sprite data
-	{ "232-c2.c2",    0x800000, 0x0ea40438, 3 | BRF_GRA },           //  4
-	{ "232-c3.c3",    0x800000, 0xb092e64f, 3 | BRF_GRA },           //  5
-	{ "232-c4.c4",    0x800000, 0xd25e8a04, 3 | BRF_GRA },           //  6
-	{ "232-c5.c5",    0x800000, 0x8572aa61, 3 | BRF_GRA },           //  7
-	{ "232-c6.c6",    0x800000, 0xdcef5f41, 3 | BRF_GRA },           //  8
+	{ "232-c1.bin",    0x800000, 0xe1b11416, 3 | BRF_GRA },           //  3 Sprite data
+	{ "232-c2.bin",    0x800000, 0x0ea40438, 3 | BRF_GRA },           //  4
+	{ "232-c3.bin",    0x800000, 0xb092e64f, 3 | BRF_GRA },           //  5
+	{ "232-c4.bin",    0x800000, 0xd25e8a04, 3 | BRF_GRA },           //  6
+	{ "232cto-c5.bin",    0x800000, 0x8572aa61, 3 | BRF_GRA },           //  7
+	{ "232cto-c6.bin",    0x800000, 0xdcef5f41, 3 | BRF_GRA },           //  8
 
-	{ "232-m1.m1",    0x020000, 0x45348747, 4 | BRF_ESS | BRF_PRG }, //  9 Z80 code
+	{ "232-m1.bin",    0x020000, 0x45348747, 4 | BRF_ESS | BRF_PRG }, //  9 Z80 code
 
-	{ "232-v1.v1",    0x400000, 0x22a2b5b5, 5 | BRF_SND },           // 10 Sound data
-	{ "232-v2.v2",    0x400000, 0x92b14f89, 5 | BRF_SND },           // 11
-	{ "232-v3.v3",    0x400000, 0x759eb954, 5 | BRF_SND },           // 12
+	{ "232-v1.bin",    0x400000, 0x22a2b5b5, 5 | BRF_SND },           // 10 Sound data
+	{ "232-v2.bin",    0x400000, 0x92b14f89, 5 | BRF_SND },           // 11
+	{ "232-v3.bin",    0x400000, 0x759eb954, 5 | BRF_SND },           // 12
 };
 
 STDROMPICKEXT(kof97cto231, kof97cto231, neogeo)
 STD_ROM_FN(kof97cto231)
 
 struct BurnDriver BurnDrvkof97cto231 = {
-	"kof97cto231", "kof97", "neogeo", NULL, "1997",
-	"The King of Fighters '97 Plus2020max (hack)\0", NULL, "hack", "Neo Geo MVS",
+	"kof97cto231", "kof97", "neogeo", NULL, "2021",
+	"拳皇 '97 终极之战金蛇版 (hack)\0", NULL, "hack", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_CLONE | BDF_BOOTLEG, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
 	NULL, kof97cto231RomInfo, kof97cto231RomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
@@ -20825,11 +20824,89 @@ STDROMPICKEXT(kof97cto2sp, kof97cto2sp, neogeo)
 STD_ROM_FN(kof97cto2sp)
 
 struct BurnDriver BurnDrvkof97cto2sp = {
-	"kof97cto2sp", "kof97", "neogeo", NULL, "1997",
+	"kof97cto2sp", "kof97", "neogeo", NULL, "2021",
 	"The King of Fighters '97 终极之战plus特别版 (hack)\0", NULL, "hack", "Neo Geo MVS",
 	NULL, NULL, NULL, NULL,
 	BDF_GAME_WORKING | BDF_CLONE | BDF_BOOTLEG, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
 	NULL, kof97cto2spRomInfo, kof97cto2spRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
 	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
 	0x1000, 304, 224, 4, 3
+};
+
+// 拳皇2002卢卡尔加强版
+
+static struct BurnRomInfo kof2k2rugalRomDesc[] = {
+	{ "kf2k2mp3-p1.rom",    0x100000, 0x3ab03781, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+	{ "kf2k2mp3-p2.rom",  0x400000, 0xf0882da4, 1 | BRF_ESS | BRF_PRG }, //  1
+
+	{ "kf2k2mp3-s1.rom",  0x020000, 0x14b08bd9, 2 | BRF_GRA },           //  2 Text layer tiles
+
+	{ "kf2k2_c1.rom",  0x800000, 0x7efa6ef7, 3 | BRF_GRA },           //  3 Sprite data
+	{ "kf2k2_c2.rom",  0x800000, 0xaa82948b, 3 | BRF_GRA },           //  4
+	{ "kf2k2_c3.rom",  0x800000, 0xca656090, 3 | BRF_GRA },           //  5
+	{ "kf2k2_c4.rom",  0x800000, 0xeb898849, 3 | BRF_GRA },           //  6
+	{ "kof2k2_c5.rom",     0x800000, 0x11126545, 3 | BRF_GRA },           //  7
+	{ "kof2k2_c6.rom",     0x800000, 0xd225bb9b, 3 | BRF_GRA },           //  8
+	{ "kf2k2_c7.rom",  0x800000, 0x0e9f6adb, 3 | BRF_GRA },           //  9
+	{ "kf2k2_c8.rom",  0x800000, 0x9961799e, 3 | BRF_GRA },           // 10
+
+	{ "kof2K2_m1.rom",   0x020000, 0xab9d360e, 4 | BRF_ESS | BRF_PRG }, // 11 Z80 code
+
+	{ "kof2K2_v1.rom",     0x400000, 0x13d98607, 5 | BRF_SND },           // 12 Sound data
+	{ "kof2K2_v2.rom",     0x400000, 0x9cf74677, 5 | BRF_SND },           // 13
+	{ "kof2K2_v3.rom",     0x400000, 0x8e9448b5, 5 | BRF_SND },           // 14
+	{ "kof2K2_v4.rom",     0x400000, 0x067271b5, 5 | BRF_SND },           // 15
+};
+
+STDROMPICKEXT(kof2k2rugal, kof2k2rugal, neogeo)
+STD_ROM_FN(kof2k2rugal)
+
+struct BurnDriver BurnDrvkof2k2rugal = {
+	"kof2k2rugal", "kof2002", "neogeo", NULL, "2011",
+	"拳皇2002卢卡尔加强版\0", NULL, "hack", "KOF-ON Team",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
+	NULL, kof2k2rugalRomInfo, kof2k2rugalRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
+};
+
+// 拳皇2002 仿02UM 卢卡尔 最终版 究极简化
+
+static struct BurnRomInfo kof2k2fr02umRomDesc[] = {
+	{ "kof2k2rugal-p1.rom",    0x100000, 0x4c52e5be, 1 | BRF_ESS | BRF_PRG }, //  0 68K code
+	{ "kof2k2rugal-p2.rom",  0x400000, 0x870e8dbf, 1 | BRF_ESS | BRF_PRG }, //  1
+
+	{ "kof2k2rugal-s1.rom",  0x020000, 0x6cf3f8ac, 2 | BRF_GRA },           //  2 Text layer tiles
+
+	{ "kof2k2rugal-c1.rom",  0x800000, 0x745b343e, 3 | BRF_GRA },           //  3 Sprite data
+	{ "kof2k2rugal-c2.rom",  0x800000, 0x2aab7f98, 3 | BRF_GRA },           //  4
+	{ "kof2k2rugal-c3.rom",  0x800000, 0xca656090, 3 | BRF_GRA },           //  5
+	{ "kof2k2rugal-c4.rom",  0x800000, 0xeb898849, 3 | BRF_GRA },           //  6
+	{ "kof2k2rugal-c5.rom",     0x800000, 0x74bba7c6, 3 | BRF_GRA },           //  7
+	{ "kof2k2rugal-c6.rom",     0x800000, 0xe20d2216, 3 | BRF_GRA },           //  8
+	{ "kof2k2rugal-c7.rom",  0x800000, 0x3f3de7cd, 3 | BRF_GRA },           //  9
+	{ "kof2k2rugal-c8.rom",  0x800000, 0xeb14444b, 3 | BRF_GRA },           // 10
+	{ "kof2k2rugal-c9.rom",  0x800000, 0xa258b216, 3 | BRF_GRA },           // 11
+	{ "kof2k2rugal-c10.rom",  0x800000, 0xec6cea7c, 3 | BRF_GRA },           // 12
+
+	{ "kof2k2rugal-m1.rom",   0x020000, 0xab9d360e, 4 | BRF_ESS | BRF_PRG }, // 13 Z80 code
+
+	{ "kof2k2rugal-v1.rom",     0x400000, 0x13d98607, 5 | BRF_SND },           // 14 Sound data
+	{ "kof2k2rugal-v2.rom",     0x400000, 0x9cf74677, 5 | BRF_SND },           // 15
+	{ "kof2k2rugal-v3.rom",     0x400000, 0x8e9448b5, 5 | BRF_SND },           // 16
+	{ "kof2k2rugal-v4.rom",     0x400000, 0x067271b5, 5 | BRF_SND },           // 17
+};
+
+STDROMPICKEXT(kof2k2fr02um, kof2k2fr02um, neogeo)
+STD_ROM_FN(kof2k2fr02um)
+
+struct BurnDriver BurnDrvkof2k2fr02um = {
+	"kof2k2fr02um", "kof2002", "neogeo", NULL, "2011",
+	"拳皇2002 仿02UM 卢卡尔 最终版 究极简化\0", NULL, "hack", "KOF-ON Team",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE | BDF_HACK, 2, HARDWARE_PREFIX_CARTRIDGE | HARDWARE_SNK_NEOGEO, GBF_VSFIGHT, FBF_KOF,
+	NULL, kof2k2fr02umRomInfo, kof2k2fr02umRomName, NULL, NULL, NULL, NULL, neogeoInputInfo, neogeoDIPInfo,
+	NeoInit, NeoExit, NeoFrame, NeoRender, NeoScan, &NeoRecalcPalette,
+	0x1000,	304, 224, 4, 3
 };
