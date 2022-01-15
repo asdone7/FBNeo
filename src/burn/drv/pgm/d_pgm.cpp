@@ -8455,3 +8455,119 @@ struct BurnDriver BurnDrvkovplus2012d = {
         kovInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
 	448, 224, 4, 3
 };
+
+// 西游释厄传 103 五行传说 唐僧天王版
+
+static struct BurnRomInfo olds103twxcsRomDesc[] = {
+	{ "p0500.v103",			0x0400000, 0xc4832cda, 1 | BRF_PRG | BRF_ESS }, //  0 68K Code
+
+	{ "t0500.rom",	  			0x0400000, 0x7c0bb3cb, 2 | BRF_GRA },			//  5 Tile data
+	{ "pgm_t0501.u19",	   			0x0200000, 0xd2106864, 2 | BRF_GRA },			//  6
+
+	{ "a0500.rom",	   			0x0400000, 0x5a35bd57, 3 | BRF_GRA },			//  7 Sprite Color Data
+	{ "pgm_a0501.u6",	   			0x0400000, 0x98c931b1, 3 | BRF_GRA },			//  8
+	{ "pgm_a0502.u7",	   			0x0400000, 0xc3fcdf1d, 3 | BRF_GRA },			//  9
+	{ "pgm_a0503.u8",	   			0x0400000, 0x066dffec, 3 | BRF_GRA },			// 10
+	{ "pgm_a0504.u11",	   			0x0400000, 0x45337583, 3 | BRF_GRA },			// 11
+	{ "pgm_a0505.u12",	   			0x0400000, 0x5b8cf3a5, 3 | BRF_GRA },			// 12
+	{ "a0506.rom",	   			0x0800001, 0xc17a9691, 3 | BRF_GRA },			// 13
+
+	{ "b0500.rom",	   			0x0400000, 0x6d08b15b, 4 | BRF_GRA },			// 14 Sprite Masks & Color Indexes
+	{ "pgm_b0501.u10",	   			0x0400000, 0x1546c2e9, 4 | BRF_GRA },			// 15
+	{ "pgm_b0502.u15",	   			0x0400000, 0xe97b31c3, 4 | BRF_GRA },			// 16
+	{ "pgm_b0503.u16",	   			0x0800001, 0x161cb487, 4 | BRF_GRA },			// 17
+
+	{ "m0500.rom",	   			0x0600000, 0x37928cdd, 5 | BRF_SND },			// 18 Samples
+	
+#if !defined (ROM_VERIFY)
+	// ROM label SP 西遊記 DATA on sticker
+	{ "sp_data.u6",	   				0x010000, 0xe7613dda, 9 | BRF_PRG | BRF_ESS },  // 15 Protection Rom
+#else
+	{ "ram_dump",	   				0x040000, 0x280cfb4e, 0 | BRF_OPT },			// 16 Dump of RAM shared with protection device
+#endif
+};
+
+STDROMPICKEXT(olds103twxcs, olds103twxcs, pgm)
+STD_ROM_FN(olds103twxcs)
+
+struct BurnDriver BurnDrvolds103twxcs = {
+	"olds103twxcs", "olds", "pgm", NULL, "1998",
+	"西游释厄传 103 五行传说 唐僧天王版\0", "Imperfect Protection Emulation", "IGS", "PolyGameMaster",
+	L"Oriental Legend Super\0\u897F\u6E38\u91CA\u5384\u4F20 Super (olds103twxcs)\0", NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 4, HARDWARE_IGS_PGM, GBF_SCRFIGHT, 0,
+	NULL, olds103twxcsRomInfo, olds103twxcsRomName, NULL, NULL, NULL, NULL, pgmInputInfo, olds100DIPInfo,
+	oldsInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
+	448, 224, 4, 3
+};
+
+// 三国战记2七打范狗 (Hack)
+
+static struct BurnRomInfo kov2p7dfgRomDesc[] = {
+	{ "u8-27322.rom",  			0x0400000, 0x40ddd3c1, 1 | BRF_PRG | BRF_ESS }, //  0 68K Code
+
+	{ "pgm_t1200.u21",	   		0x0800000, 0xd7e26609, 2 | BRF_GRA },			//  1 Tile data
+
+	{ "pgm_a1200.u1",	   		0x0800000, 0xceeb81d8, 3 | BRF_GRA },			//  2 Sprite Color Data
+	{ "pgm_a1201.u4",   			0x0800000, 0x21063ca7, 3 | BRF_GRA },			//  3
+	{ "pgm_a1202.u6",	   		0x0800000, 0x4bb92fae, 3 | BRF_GRA },			//  4
+	{ "pgm_a1203.u8",	   		0x0800000, 0xe73cb627, 3 | BRF_GRA },			//  5
+	{ "pgm_a1204.u10",   			0x0200000, 0x14b4b5bb, 3 | BRF_GRA },			//  6
+
+	{ "pgm_b1200.u5",	   		0x0800000, 0xbed7d994, 4 | BRF_GRA },			//  7 Sprite Masks & Color Indexes
+	{ "pgm_b1201.u7",	   		0x0800000, 0xf251eb57, 4 | BRF_GRA },			//  8
+
+	{ "pgm_m1200.u3",	   		0x0800000, 0xb0d88720, 5 | BRF_SND },			//  9 Samples
+
+	{ "kov2p_igs027a_china.bin",		0x0004000, 0x19a0bd95, 7 | BRF_PRG | BRF_ESS }, // 10 Internal ARM7 Rom
+
+	{ "v200-16.rom",  			0x0200000, 0x16a0c11f, 8 | BRF_PRG | BRF_ESS }, // 11 External ARM7 Rom
+};
+
+STDROMPICKEXT(kov2p7dfg, kov2p7dfg, pgm)
+STD_ROM_FN(kov2p7dfg)
+
+struct BurnDriver BurnDrvkov2p7dfg = {
+	"kov2p7dfg", "kov2p", "pgm", NULL, "2021-04-16",
+	"三国战记2七打范狗 (Hack)\0", NULL, "Hack", "PolyGameMaster",
+	NULL, NULL, NULL, NULL,
+	BDF_GAME_WORKING, 4, HARDWARE_IGS_PGM | HARDWARE_IGS_USE_ARM_CPU, GBF_SCRFIGHT, 0,
+	NULL, kov2p7dfgRomInfo, kov2p7dfgRomName, NULL, NULL, NULL, NULL, pgmInputInfo, kovassgaDIPInfo,
+	kov2pInit, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
+	448, 224, 4, 3
+};
+
+// 三国战纪2 斗转星旋
+
+static struct BurnRomInfo kov2dzxxRomDesc[] = {
+	{ "v100_u18.u18",				0x0500000, 0xcf0df412, 1 | BRF_PRG | BRF_ESS }, //  0 68K Code
+
+	{ "pgm_t1200.u27",	   			0x0800000, 0xda7f46f8, 2 | BRF_GRA },			//  1 Tile data
+
+	{ "pgm_a1200.u1",	   			0x0800000, 0xceeb81d8, 3 | BRF_GRA },			//  2 Sprite Color Data
+	{ "pgm_a1201.u4",   			0x0800000, 0x82f0a878, 3 | BRF_GRA },			//  3
+	{ "pgm_a1202.u6",	   			0x0800000, 0x4bb92fae, 3 | BRF_GRA },			//  4
+	{ "pgm_a1203.u8",	   			0x0800000, 0xe73cb627, 3 | BRF_GRA },			//  5
+	{ "pgm_a1204.u10",   			0x0800000, 0x27527099, 3 | BRF_GRA },			//  6
+
+	{ "pgm_b1200.u5",	   			0x0800000, 0xbed7d994, 4 | BRF_GRA },			//  7 Sprite Masks & Color Indexes
+	{ "pgm_b1201.u7",	   			0x0800000, 0xf251eb57, 4 | BRF_GRA },			//  8
+
+	{ "pgm_m1200.u3",	   			0x0800000, 0xb0d88720, 5 | BRF_SND },			//  9 Samples
+
+	{ "kov2_v100_hongkong.asic", 	0x0004000, 0x71c7f428, 7 | BRF_PRG | BRF_ESS }, // 10 Internal ARM7 Rom
+
+	{ "v100_u19.u19",				0x0300000, 0x7756bcb6, 8 | BRF_PRG | BRF_ESS }, // 11 External ARM7 Rom
+};
+
+STDROMPICKEXT(kov2dzxx, kov2dzxx, pgm)
+STD_ROM_FN(kov2dzxx)
+
+struct BurnDriver BurnDrvkov2dzxx = {
+	"kov2dzxx", "kov2", "pgm", NULL, "2000",
+	"三国战纪2 斗转星旋\0", NULL, "IGS", "PolyGameMaster",
+	L"Knights of Valour 2\0\u4e09\u56fd\u6218\u7eaa 2 (kov2dzxx)\0", NULL, NULL, NULL,
+	BDF_GAME_WORKING | BDF_CLONE, 4, HARDWARE_IGS_PGM | HARDWARE_IGS_USE_ARM_CPU, GBF_SCRFIGHT, 0,
+	NULL, kov2dzxxRomInfo, kov2dzxxRomName, NULL, NULL, NULL, NULL, pgmInputInfo, kov2DIPInfo,
+	kov2107Init, pgmExit, pgmFrame, pgmDraw, pgmScan, &nPgmPalRecalc, 0x900,
+	448, 224, 4, 3
+};
