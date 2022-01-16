@@ -14819,7 +14819,7 @@ struct BurnDriver BurnDrvcthd2k3a = {
 };
 
 // Double Dragon (Boss hack)
-// Enable 2 bosses: Duke & Shuko - hack by yumeji1768
+// 双截龙 正宗加强版
 
 static struct BurnRomInfo doubledrbhRomDesc[] = {
 	{ "082-p1bh.p1",  0x200000, 0x92826c06, 1 | BRF_ESS | BRF_PRG }, //  0 68K code			/ TC5316200
