@@ -288,11 +288,16 @@ struct _mcs51_state_t
 
 	UINT8	forced_inputs[4];
 
+	// JB-related hacks
+	UINT8	last_op;
+	UINT8	last_bit;
+
 	/* DS5002FP */
 	struct {
 		UINT8	previous_ta;		/* Previous Timed Access value */
 		UINT8	ta_window;			/* Limed Access window */
 		UINT8	range;				/* Memory Range */
+		INT32   rnr_delay;          /* delay before new random number available */
 		ds5002fp_config config;	/* Bootstrap Configuration */
 	} ds5002fp;
 
@@ -900,6 +905,8 @@ static INLINE UINT8 bit_address_r(UINT8 offset)
 	int	distance;	/* distance between bit addressable words */
 					/* 1 for normal bits, 8 for sfr bit addresses */
 
+	mcs51_state->last_bit = offset;
+
 	//User defined bit addresses 0x20-0x2f (values are 0x0-0x7f)
 	if (offset < 0x80) {
 		distance = 1;
@@ -1325,7 +1332,7 @@ static INLINE void serial_transmit(UINT8 data)
 		//9 bit uart
 		case 2:
 		case 3:
-			LOG(("Serial mode %d not supported in mcs51!\n", mode));
+			mcs51_state->uart.bits_to_send = 8+3;
 			break;
 	}
 }
@@ -1347,7 +1354,7 @@ static INLINE void serial_receive()
 			//9 bit uart
 			case 2:
 			case 3:
-				LOG(("Serial mode %d not supported in mcs51!\n", mode));
+				mcs51_state->uart.delay_cycles = 8+3;
 				break;
 		}
 	}
@@ -1386,9 +1393,10 @@ static void execute_op(UINT8 op)
 		mcs51_state->recalc_parity = 0;
 	}
 
+	mcs51_state->last_op = op;
+
 	switch( op )
 	{
-
 		case 0x00:	nop(op);							break;	//NOP
 		case 0x01:	ajmp(op);						break;	//AJMP code addr
 		case 0x02:	ljmp(op);						break;	//LJMP code addr
@@ -1806,11 +1814,9 @@ static void check_irqs()
 		return;
 	}
 
-#if 0
-	/* also break out of jb int0,<self> loops */
-	if (ROP(PC) == 0x20 && ROP_ARG(PC+1) == 0xb2 && ROP_ARG(PC+2) == 0xfd)
-		PC += 3;
-#endif
+	// Hack to work around polling latency issue with JB INT0/INT1
+	if (mcs51_state->last_op == 0x20 && ((int_vec == V_IE0 && mcs51_state->last_bit == 0xb2) || (int_vec == V_IE1 && mcs51_state->last_bit == 0xb3)))
+		PC = PPC + 3;
 
 	//Save current pc to stack, set pc to new interrupt vector
 	push_pc();
@@ -1937,7 +1943,6 @@ void mcs51_set_irq_line(int irqline, int state)
 
 		//External Interrupt 1
 		case MCS51_INT1_LINE:
-
 			//Line Asserted?
 			if (state != CLEAR_LINE) {
 				if (state == CPU_IRQSTATUS_HOLD) mcs51_state->irqHOLD = 1;
@@ -2029,7 +2034,7 @@ INT32 mcs51Run(int cycles) // divide cycles by 12! -dink
 	if ((mcs51_state->features & FEATURE_CMOS) && GET_PD)
 	{
 		mcs51_state->icount = 0;
-		return 0;
+		goto endit;
 	}
 
 	mcs51_state->icount -= mcs51_state->inst_cycles;
@@ -2043,7 +2048,7 @@ INT32 mcs51Run(int cycles) // divide cycles by 12! -dink
 			mcs51_state->icount--;
 			burn_cycles(1);
 		} while( mcs51_state->icount > 0 );
-		return 0;
+		goto endit;
 	}
 
 	do
@@ -2062,20 +2067,25 @@ INT32 mcs51Run(int cycles) // divide cycles by 12! -dink
 
 		/* if in powerdown, just return */
 		if ((mcs51_state->features & FEATURE_CMOS) && GET_PD)
-			return 0;
+			goto endit;
 
 		burn_cycles(mcs51_state->inst_cycles);
 
 		/* decrement the timed access window */
-		if (mcs51_state->features & FEATURE_DS5002FP)
+		if (mcs51_state->features & FEATURE_DS5002FP) {
 			mcs51_state->ds5002fp.ta_window = (mcs51_state->ds5002fp.ta_window ? (mcs51_state->ds5002fp.ta_window - 1) : 0x00);
+
+			if (mcs51_state->ds5002fp.rnr_delay > 0)
+				mcs51_state->ds5002fp.rnr_delay-=mcs51_state->inst_cycles;
+		}
 
 		/* If the chip entered in idle mode, end the loop */
 		if ((mcs51_state->features & FEATURE_CMOS) && GET_IDL)
-			return 0;
+			goto endit;
 
 	} while( mcs51_state->icount > 0 && !mcs51_state->end_run );
 
+	endit:
 	cycles = cycles - mcs51_state->icount;
 	mcs51_state->cycle_start = mcs51_state->icount = 0;
 	mcs51_state->total_cycles += cycles;
@@ -2118,6 +2128,10 @@ void mcs51_scan(INT32 nAction)
 			ba.nLen	  = STRUCT_SIZE_HELPER(struct _mcs51_state_t, ds5002fp);
 			ba.szName = "i8051 Regs";
 			BurnAcb(&ba);
+
+			if (mcs51_state_store[i].features & FEATURE_DS5002FP) {
+				BurnRandomScan(nAction); // ds5002fp
+			}
 		}
 	}
 }
@@ -2263,6 +2277,8 @@ void mcs51_reset (void)
 	/* Flag as NO IRQ in Progress */
 	mcs51_state->irq_active = 0;
 	mcs51_state->cur_irq_prio = -1;
+	mcs51_state->last_op = 0;
+	mcs51_state->last_bit = 0;
 
 	//Clear Ram (w/0xff)
 	memset(&mcs51_state->internal_ram,0xff,sizeof(mcs51_state->internal_ram));
@@ -2334,6 +2350,7 @@ void mcs51_reset (void)
 		mcs51_state->ds5002fp.previous_ta = 0;
 		mcs51_state->ds5002fp.ta_window = 0;
 		mcs51_state->ds5002fp.range = (GET_RG1 << 1) | GET_RG0;
+		mcs51_state->ds5002fp.rnr_delay = 160;
 	}
 
 }
@@ -2403,6 +2420,17 @@ static void ds5002fp_sfr_write(INT32 offset, UINT8 data)
 	//mcs51_state->data->write_byte((INT32) offset | 0x100, data);
 }
 
+static UINT8 ds5002fp_handle_rnr()
+{
+	if (mcs51_state->ds5002fp.rnr_delay <= 0)
+	{
+		mcs51_state->ds5002fp.rnr_delay = 160; // delay before another random number can be read
+		return BurnRandom();
+	}
+	else
+		return 0x00;
+}
+
 static UINT8 ds5002fp_sfr_read(INT32 offset)
 {
 	switch (offset)
@@ -2412,8 +2440,10 @@ static UINT8 ds5002fp_sfr_read(INT32 offset)
 		case ADDR_CRCH: 	DS5_LOGR(CRCH, data);		break;
 		case ADDR_MCON: 	DS5_LOGR(MCON, data);		break;
 		case ADDR_TA:		DS5_LOGR(TA, data);			break;
-		case ADDR_RNR:		DS5_LOGR(RNR, data);		break;
-		case ADDR_RPCTL:	DS5_LOGR(RPCTL, data);		return 0x80; break; // 7/17/17 fix touchgo
+		case ADDR_RNR:		DS5_LOGR(RNR, data);
+			return ds5002fp_handle_rnr();
+		case ADDR_RPCTL:	DS5_LOGR(RPCTL, data);
+			return (mcs51_state->ds5002fp.rnr_delay <= 0) ? 0x80 : 0x00;
 		case ADDR_RPS:		DS5_LOGR(RPS, data);		break;
 		case ADDR_PCON:
 			SET_PFW(0);		/* reset PFW flag */

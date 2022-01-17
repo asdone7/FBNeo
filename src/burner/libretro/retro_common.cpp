@@ -40,7 +40,7 @@ struct RomBiosInfo neogeo_bioses[] = {
 std::vector<dipswitch_core_option> dipswitch_core_options;
 struct GameInp *pgi_reset;
 struct GameInp *pgi_diag;
-bool is_neogeo_game = false;
+bool bIsNeogeoCartGame = false;
 bool allow_neogeo_mode = true;
 bool neogeo_use_specific_default_bios = false;
 bool bAllowDepth32 = false;
@@ -87,7 +87,7 @@ static const struct retro_core_option_v2_definition var_fbneo_allow_depth_32 = {
 };
 static const struct retro_core_option_v2_definition var_fbneo_vertical_mode = {
 	"fbneo-vertical-mode",
-	"垂直模式",
+	"坚版模式",
 	NULL,
 	"垂直旋转屏幕",
 	NULL,
@@ -215,7 +215,7 @@ static const struct retro_core_option_v2_definition var_fbneo_allow_patched_roms
 	"fbneo-allow-patched-romsets",
 	"peng汉化",
 	NULL,
-	"peng汉化, 请勿商用, 严禁将本核心编译后使用在收费或者挂有募捐名义的项目中！！！ ",
+	"peng汉化, 请勿商用, 严禁将本核心编译后使用在收费或者挂有募捐名义的项目中！！！",
 	NULL,
 	NULL,
 	{
@@ -311,7 +311,7 @@ static const struct retro_core_option_v2_definition var_fbneo_lightgun_hide_cros
 #ifdef USE_CYCLONE
 static const struct retro_core_option_v2_definition var_fbneo_cyclone = {
 	"fbneo-cyclone",
-	"使用飓风",
+	"启用 cyclone",
 	NULL,
 	"使用它可能会提高一些低端设备模拟系统的性能,但会导致：保存状态不会与一般的解释器兼容，有些系统将无法正常使用",
 	NULL,
@@ -353,7 +353,7 @@ static const struct retro_core_option_v2_definition var_fbneo_memcard_mode = {
 	NULL,
 	NULL,
 	{
-		{ "disabled", NULL },
+		{ "禁用", NULL },
 		{ "shared", NULL },
 		{ "per-game", NULL },
 		{ NULL, NULL },
@@ -370,11 +370,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_layer_1 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_layer_2 = {
 	"fbneo-debug-layer-2",
@@ -384,11 +384,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_layer_2 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_layer_3 = {
 	"fbneo-debug-layer-3",
@@ -398,11 +398,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_layer_3 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_layer_4 = {
 	"fbneo-debug-layer-4",
@@ -412,11 +412,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_layer_4 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_1 = {
 	"fbneo-debug-sprite-1",
@@ -426,11 +426,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_1 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_2 = {
 	"fbneo-debug-sprite-2",
@@ -440,11 +440,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_2 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_3 = {
 	"fbneo-debug-sprite-3",
@@ -454,11 +454,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_3 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_4 = {
 	"fbneo-debug-sprite-4",
@@ -468,11 +468,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_4 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_5 = {
 	"fbneo-debug-sprite-5",
@@ -482,11 +482,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_5 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_6 = {
 	"fbneo-debug-sprite-6",
@@ -496,11 +496,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_6 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_7 = {
 	"fbneo-debug-sprite-7",
@@ -510,11 +510,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_7 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_8 = {
 	"fbneo-debug-sprite-8",
@@ -524,11 +524,11 @@ static const struct retro_core_option_v2_definition var_fbneo_debug_sprite_8 = {
 	NULL,
 	"debug",
 	{
-		{ "disabled", NULL },
-		{ "enabled", NULL },
+		{ "禁用", NULL },
+		{ "启用", NULL },
 		{ NULL, NULL },
 	},
-	"enabled"
+	"启用"
 };
 #endif
 
@@ -594,7 +594,7 @@ void set_neo_system_bios()
 
 void evaluate_neogeo_bios_mode(const char* drvname)
 {
-	if (!is_neogeo_game)
+	if (!bIsNeogeoCartGame)
 		return;
 
 	bool is_bios_dipswitch_found = false;
@@ -666,7 +666,7 @@ void set_environment()
 		vars_systems.push_back(&var_fbneo_diagnostic_input);
 	}
 
-	if (is_neogeo_game)
+	if (bIsNeogeoCartGame)
 	{
 		// Add the Neo Geo core options
 		if (allow_neogeo_mode)
@@ -733,7 +733,7 @@ void set_environment()
 		option_defs_us[idx_var].desc_categorized = dipswitch_core_options[dip_idx].friendly_name_categorized.c_str();
 		option_defs_us[idx_var].default_value    = dipswitch_core_options[dip_idx].default_bdi.szText;
 		// Instead of filtering out the dips, make the description a warning if it's a neogeo game using a different default bios
-		if (neogeo_use_specific_default_bios && is_neogeo_game && dipswitch_core_options[dip_idx].friendly_name.compare("[Dipswitch] BIOS") == 0)
+		if (neogeo_use_specific_default_bios && bIsNeogeoCartGame && dipswitch_core_options[dip_idx].friendly_name.compare("[Dipswitch] BIOS") == 0)
 			option_defs_us[idx_var].info         = "这个NEOGEO游戏不是使用默认BIOS, 更换BIOS后可能无法运行游戏";
 		else
 			option_defs_us[idx_var].info         = "DipSwitch设置, 设置特定于运行的 romset";
@@ -742,19 +742,19 @@ void set_environment()
 			option_defs_us[idx_var].values[dip_value_idx].value = dipswitch_core_options[dip_idx].values[dip_value_idx].friendly_name.c_str();
 		}
 		option_defs_us[idx_var].values[dipswitch_core_options[dip_idx].values.size()].value = NULL;
-		if (option_defs_us[idx_var].default_value == NULL) HandleMessage(RETRO_LOG_ERROR, "没有找到 '%s' 的默认值, 这是一个错误, 请记述它\n", option_defs_us[idx_var].desc);
+		if (option_defs_us[idx_var].default_value == NULL) HandleMessage(RETRO_LOG_ERROR, "Default value for '%s' not found, it's a bug, please report it\n", option_defs_us[idx_var].desc);
 		idx_var++;
 	}
 
 	// Add the cheats core options
 	for (int cheat_idx = 0; cheat_idx < nbr_cheats; cheat_idx++)
 	{
-		option_defs_us[idx_var].category_key     = "金手指";
+		option_defs_us[idx_var].category_key     = "cheat";
 		option_defs_us[idx_var].key              = cheat_core_options[cheat_idx].option_name.c_str();
 		option_defs_us[idx_var].desc             = cheat_core_options[cheat_idx].friendly_name.c_str();
 		option_defs_us[idx_var].desc_categorized = cheat_core_options[cheat_idx].friendly_name_categorized.c_str();
 		option_defs_us[idx_var].default_value    = cheat_core_options[cheat_idx].default_value.c_str();
-		option_defs_us[idx_var].info             = "在游戏中使用, 前提你有对应的金手指文件";
+		option_defs_us[idx_var].info             = "Specific to the running romset and your cheat database";
 		for (int cheat_value_idx = 0; cheat_value_idx < cheat_core_options[cheat_idx].values.size(); cheat_value_idx++)
 		{
 			option_defs_us[idx_var].values[cheat_value_idx].value = cheat_core_options[cheat_idx].values[cheat_value_idx].friendly_name.c_str();
@@ -778,7 +778,7 @@ void set_environment()
 			"配置音频设置"
 		},
 		{
-			"dipswitch",
+			"dip开关h",
 			"DIP 开关",
 			"配置 DIP 开关"
 		},
@@ -791,7 +791,7 @@ void set_environment()
 		{
 			"debug",
 			"Debug",
-			"Configure Debug Features"
+			"配置 Debug Features"
 		},
 #endif
 		{ NULL, NULL, NULL },
@@ -802,7 +802,6 @@ void set_environment()
 		option_defs_us
 	};
 
-	bool libretro_supports_option_categories = false;
 	unsigned version = 0;
 
 	if (!environ_cb(RETRO_ENVIRONMENT_GET_CORE_OPTIONS_VERSION, &version))
@@ -810,7 +809,7 @@ void set_environment()
 
 	if (version >= 2)
 	{
-		libretro_supports_option_categories = environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_V2, &options_us);
+		environ_cb(RETRO_ENVIRONMENT_SET_CORE_OPTIONS_V2, &options_us);
 	}
 	else
 	{
@@ -943,6 +942,12 @@ void set_environment()
 error:
 		/* Clean up */
 
+		if (option_defs_us)
+		{
+			free(option_defs_us);
+			option_defs_us = NULL;
+		}
+
 		if (option_v1_defs_us)
 		{
 			free(option_v1_defs_us);
@@ -1003,7 +1008,7 @@ void check_variables(void)
 	var.key = var_fbneo_allow_depth_32.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			bAllowDepth32 = true;
 		else
 			bAllowDepth32 = false;
@@ -1012,9 +1017,9 @@ void check_variables(void)
 	var.key = var_fbneo_vertical_mode.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			nVerticalMode = 1;
-		else if (strcmp(var.value, "备用") == 0)
+		else if (strcmp(var.value, "alternate") == 0)
 			nVerticalMode = 2;
 		else
 			nVerticalMode = 0;
@@ -1025,13 +1030,13 @@ void check_variables(void)
 		var.key = var_fbneo_frameskip_type.key;
 		if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 		{
-			if (strcmp(var.value, "禁用") == 0)
+			if (strcmp(var.value, "disabled") == 0)
 				nFrameskipType = 0;
-			else if (strcmp(var.value, "固定") == 0)
+			else if (strcmp(var.value, "Fixed") == 0)
 				nFrameskipType = 1;
-			else if (strcmp(var.value, "自动") == 0)
+			else if (strcmp(var.value, "Auto") == 0)
 				nFrameskipType = 2;
-			else if (strcmp(var.value, "手动") == 0)
+			else if (strcmp(var.value, "Manual") == 0)
 				nFrameskipType = 3;
 		}
 
@@ -1062,7 +1067,7 @@ void check_variables(void)
 		var.key = var_fbneo_diagnostic_input.key;
 		if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 		{
-			if (strcmp(var.value, "Hold Start") == 0)
+			if (strcmp(var.value, "按住 Start") == 0)
 			{
 				diag_input = diag_input_start;
 				SetDiagInpHoldFrameDelay(60);
@@ -1072,7 +1077,7 @@ void check_variables(void)
 				diag_input = diag_input_start_a_b;
 				SetDiagInpHoldFrameDelay(0);
 			}
-			else if(strcmp(var.value, "Hold Start + A + B") == 0)
+			else if(strcmp(var.value, "按住 Start + A + B") == 0)
 			{
 				diag_input = diag_input_start_a_b;
 				SetDiagInpHoldFrameDelay(60);
@@ -1082,12 +1087,12 @@ void check_variables(void)
 				diag_input = diag_input_start_l_r;
 				SetDiagInpHoldFrameDelay(0);
 			}
-			else if(strcmp(var.value, "Hold Start + L + R") == 0)
+			else if(strcmp(var.value, "按住 Start + L + R") == 0)
 			{
 				diag_input = diag_input_start_l_r;
 				SetDiagInpHoldFrameDelay(60);
 			}
-			else if(strcmp(var.value, "Hold Select") == 0)
+			else if(strcmp(var.value, "按住 Select") == 0)
 			{
 				diag_input = diag_input_select;
 				SetDiagInpHoldFrameDelay(60);
@@ -1097,7 +1102,7 @@ void check_variables(void)
 				diag_input = diag_input_select_a_b;
 				SetDiagInpHoldFrameDelay(0);
 			}
-			else if(strcmp(var.value, "Hold Select + A + B") == 0)
+			else if(strcmp(var.value, "按住 Select + A + B") == 0)
 			{
 				diag_input = diag_input_select_a_b;
 				SetDiagInpHoldFrameDelay(60);
@@ -1107,7 +1112,7 @@ void check_variables(void)
 				diag_input = diag_input_select_l_r;
 				SetDiagInpHoldFrameDelay(0);
 			}
-			else if(strcmp(var.value, "Hold Select + L + R") == 0)
+			else if(strcmp(var.value, "按住 Select + L + R") == 0)
 			{
 				diag_input = diag_input_select_l_r;
 				SetDiagInpHoldFrameDelay(60);
@@ -1120,7 +1125,7 @@ void check_variables(void)
 		}
 	}
 
-	if (is_neogeo_game)
+	if (bIsNeogeoCartGame)
 	{
 		if (allow_neogeo_mode)
 		{
@@ -1160,7 +1165,7 @@ void check_variables(void)
 		var.key = var_fbneo_hiscores.key;
 		if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 		{
-			if (strcmp(var.value, "启用") == 0)
+			if (strcmp(var.value, "enabled") == 0)
 				EnableHiscores = true;
 			else
 				EnableHiscores = false;
@@ -1174,7 +1179,7 @@ void check_variables(void)
 	var.key = var_fbneo_allow_patched_romsets.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			bPatchedRomsetsEnabled = true;
 		else
 			bPatchedRomsetsEnabled = false;
@@ -1226,7 +1231,7 @@ void check_variables(void)
 	var.key = var_fbneo_lowpass_filter.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			bLowPassFilterEnabled = true;
 		else
 			bLowPassFilterEnabled = false;
@@ -1241,9 +1246,9 @@ void check_variables(void)
 	var.key = var_fbneo_lightgun_hide_crosshair.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			bLightgunHideCrosshairEnabled = true;
-		else if (strcmp(var.value, "禁用") == 0)
+		else if (strcmp(var.value, "disabled") == 0)
 			bLightgunHideCrosshairEnabled = false;
 		RefreshLightgunCrosshair();
 	}
@@ -1252,9 +1257,9 @@ void check_variables(void)
 	var.key = var_fbneo_cyclone.key;
 	if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
 	{
-		if (strcmp(var.value, "启用") == 0)
+		if (strcmp(var.value, "enabled") == 0)
 			bCycloneEnabled = true;
-		else if (strcmp(var.value, "禁用") == 0)
+		else if (strcmp(var.value, "disabled") == 0)
 			bCycloneEnabled = false;
 	}
 #endif

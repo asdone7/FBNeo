@@ -52,7 +52,9 @@ void BurnTrackballFrame(INT32 dev, INT16 PortA, INT16 PortB, INT32 VelocityStart
 
 // BurnTrackballUpdate() is called once per frame, sometimes more to translate the velocity to movement (Tempest uses this)
 void BurnTrackballUpdate(INT32 dev);
-// slither (taito/d_qix.cpp) needs a weird divider circuit on down + right signals
+void BurnTrackballUpdatePortA(INT32 dev);
+void BurnTrackballUpdatePortB(INT32 dev);
+// slither (taito/d_qix.cpp) has a divider circuit on down + right signals
 void BurnTrackballUpdateSlither(INT32 dev);
 
 // BurnTrackballUDLR() can be used to load digital inputs into the trackball
@@ -70,6 +72,8 @@ UINT16 BurnTrackballReadWord(INT32 dev, INT32 isB);
 UINT16 BurnTrackballReadWord(INT32 dev);
 INT32 BurnTrackballReadSigned(INT32 dev, INT32 isB);
 INT32 BurnTrackballReadSigned(INT32 dev);
+INT32 BurnTrackballGetDirection(INT32 num, INT32 isB); // -1 backwards (left, down), +1 forward (right, up), 0 idle
+INT32 BurnTrackballGetDirection(INT32 dev);
 
 // Reset the position counters
 void BurnTrackballReadReset();

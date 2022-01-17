@@ -57,19 +57,6 @@ endif
 MAIN_FBNEO_DIR	:= ../..
 VERSION_SCRIPT	:= $(MAIN_FBNEO_DIR)/burner/libretro/link.T
 
-INLINE_LIMIT=-finline-limit=1200 -fcheck-new
-
-# GCC < 4.9 and clang does not support -fno-tree-loop-vectorize
-ifeq ($(shell expr `gcc -dumpversion | cut -f1` \< 4.9), 1)
-	INLINE_LIMIT=
-endif
-ifneq (, $(findstring clang,$(CC)))
-	INLINE_LIMIT=
-endif
-ifneq (, $(findstring clang,$(CXX)))
-	INLINE_LIMIT=
-endif
-
 # TARGET
 TARGET_NAME := hbfbneo
 
@@ -81,7 +68,11 @@ ifneq (,$(findstring unix,$(platform)))
 	ENDIANNESS_DEFINES := -DLSB_FIRST
 
 	# Raspberry Pi
-	ifneq (,$(findstring rpi2,$(platform)))
+	ifneq (,$(findstring rpi1,$(platform)))
+		PLATFORM_DEFINES := -marm -mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard
+		HAVE_NEON = 0
+		USE_CYCLONE = 1
+	else ifneq (,$(findstring rpi2,$(platform)))
 		PLATFORM_DEFINES := -marm -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
 		HAVE_NEON = 1
 		USE_CYCLONE = 1
@@ -215,39 +206,22 @@ else ifeq ($(platform), qnx)
 	HAVE_NEON = 1
 	USE_CYCLONE = 1
 
-# PS3
+# Lightweight PS3 Homebrew SDK
 else ifneq (,$(filter $(platform), ps3 psl1ght))
 	TARGET := $(TARGET_NAME)_libretro_$(platform).a
+	PLATFORM_DEFINES += -D__PS3__
+	ifeq ($(platform), psl1ght)
+       PLATFORM_DEFINES += -D__PSL1GHT__
+	endif
 	ENDIANNESS_DEFINES =  -DWORDS_BIGENDIAN
 	EXTERNAL_ZLIB = 1
 	STATIC_LINKING = 1
 	INCLUDE_7Z_SUPPORT = 0
+#	LIGHT = 1
 
-	ifneq ($(platdef),)
-        PLATFORM_DEFINES += -D$(platdef)
-    else
-        PLATFORM_DEFINES += -D__PSL1GHT__
-    endif
-	
-	# sncps3
-	ifneq (,$(findstring sncps3,$(platform)))
-		PLATFORM_DEFINES += -DSN_TARGET_PS3
-		CXX = $(CELL_SDK)/host-win32/sn/bin/ps3ppusnc.exe
-		CC = $(CELL_SDK)/host-win32/sn/bin/ps3ppusnc.exe
-		AR = $(CELL_SDK)/host-win32/sn/bin/ps3snarl.exe
-
-	# PS3
-	else ifneq (,$(findstring ps3,$(platform)))
-		CC = $(CELL_SDK)/host-win32/ppu/bin/ppu-lv2-gcc.exe
-		CXX = $(CELL_SDK)/host-win32/ppu/bin/ppu-lv2-g++.exe
-		AR = $(CELL_SDK)/host-win32/ppu/bin/ppu-lv2-ar.exe
-
-	# Lightweight PS3 Homebrew SDK
-	else ifneq (,$(findstring psl1ght,$(platform)))
-		CC = $(PS3DEV)/ppu/bin/ppu-gcc$(EXE_EXT)
-		CXX = $(PS3DEV)/ppu/bin/ppu-g++$(EXE_EXT)
-		AR = $(PS3DEV)/ppu/bin/ppu-ar$(EXE_EXT)
-	endif
+	CC = $(PS3DEV)/ppu/bin/ppu-$(COMMONLV)gcc$(EXE_EXT)
+	CXX = $(PS3DEV)/ppu/bin/ppu-$(COMMONLV)g++$(EXE_EXT)
+	AR = $(PS3DEV)/ppu/bin/ppu-$(COMMONLV)ar$(EXE_EXT)
 
 # Vita
 else ifeq ($(platform), vita)
@@ -415,7 +389,10 @@ else ifneq (,$(filter $(platform), ngc wii wiiu))
 # Emscripten
 else ifeq ($(platform), emscripten)
 	TARGET := $(TARGET_NAME)_libretro_$(platform).bc
-	ENDIANNESS_DEFINES := -DLSB_FIRST -DNO_UNALIGNED_MEM
+	ENDIANNESS_DEFINES := -DLSB_FIRST
+	INCLUDE_7Z_SUPPORT = 0
+	EXTERNAL_ZLIB = 1
+	STATIC_LINKING = 1
 
 # Windows MSVC 2017 all architectures
 else ifneq (,$(findstring windows_msvc2017,$(platform)))
@@ -521,6 +498,8 @@ else
 	SPLIT_UP_LINK = 1
 endif
 
+# some platforms (3ds, maybe others) are unable to find "main" entry symbol if you build with their sdk
+# so let's use standard compiler for header generation since this is cross-built anyway
 CC_SYSTEM = gcc
 CXX_SYSTEM = g++
 
@@ -554,18 +533,22 @@ ifeq ($(FASTMATH), 1)
 		# 2019-06-26 : 
 		# we got some evidence that -ffast-math is actually not safe for fbneo
 		# adding -frounding-math to fix arithmetic in neogeo_run.cpp, it might fix other stuff
+		# clang might need a minimum version for -frounding-math support
 		CFLAGS += -ffast-math -frounding-math
 		CXXFLAGS += -ffast-math -frounding-math
 	endif
 endif
 
 ifeq ($(USE_EXPERIMENTAL_FLAGS), 1)
-	EXPERIMENTAL_FLAGS = -flto=4 -fwhole-program -fuse-linker-plugin \
+	EXPERIMENTAL_FLAGS = -fwhole-program -fuse-linker-plugin \
 		-fdata-sections -ffunction-sections -Wl,--gc-sections \
 		-fno-stack-protector -fno-ident \
 		-falign-functions=1 -falign-jumps=1 -falign-loops=1 \
 		-fno-unwind-tables -fno-asynchronous-unwind-tables -fno-unroll-loops \
 		-fmerge-all-constants -fno-math-errno
+	ifeq ($(shell $(CC) -v 2>&1 | grep -c "gcc version"), 1)
+		EXPERIMENTAL_FLAGS += -flto=4
+	endif
 	CFLAGS += $(EXPERIMENTAL_FLAGS)
 	CXXFLAGS += $(EXPERIMENTAL_FLAGS)
 endif
@@ -604,10 +587,10 @@ CXXFLAGS += $(fpic) $(FBNEO_DEFINES)
 LDFLAGS += $(fpic)
 
 ifeq (,$(findstring msvc,$(platform)))
-	CFLAGS += -ffloat-store -fforce-addr $(INLINE_LIMIT)  \
+	CFLAGS += -fforce-addr  \
 		-Wall -Wno-long-long -Wno-sign-compare -Wno-uninitialized -Wno-unused \
 		-Wno-sequence-point -Wno-strict-aliasing
-	CXXFLAGS += -ffloat-store -fforce-addr $(INLINE_LIMIT) \
+	CXXFLAGS += -fforce-addr \
 		-Wall -W -Wshadow -Wno-long-long -Wno-write-strings \
 		-Wunknown-pragmas -Wundef -Wno-conversion -Wno-missing-braces -Wno-multichar \
 		-Wuninitialized -Wpointer-arith -Wno-inline -Wno-unused-value \
@@ -615,7 +598,17 @@ ifeq (,$(findstring msvc,$(platform)))
 
 	ifeq (,$(filter $(platform), ps3 sncps3))
 		CFLAGS += -Wno-write-strings -Wno-pedantic
-		CXXFLAGS += -Wno-write-strings -pedantic -Wno-address -Wno-unused-but-set-variable -Wno-narrowing -Wno-pedantic
+		CXXFLAGS += -Wno-write-strings -pedantic -Wno-address -Wno-narrowing -Wno-pedantic
+	endif
+endif
+
+# gcc specific flags
+ifeq ($(shell $(CC) -v 2>&1 | grep -c "gcc version"), 1)
+	CFLAGS += -ffloat-store
+	CXXFLAGS += -ffloat-store
+	ifeq ($(shell expr `$(CC) -dumpversion | cut -f1 -d.` \>= 5), 1)
+		CFLAGS += -finline-limit=1200 -fcheck-new
+		CXXFLAGS += -finline-limit=1200 -fcheck-new
 	endif
 endif
 

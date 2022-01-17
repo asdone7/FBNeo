@@ -2579,7 +2579,10 @@ static void YBoardRenderSpriteLayer()
 						offs = addr - 1;
 						for (x = xpos; (xdelta > 0 && x <= maxx) || (xdelta < 0 && x >= minx); )
 						{
-							UINT64 pixels = BURN_ENDIAN_SWAP_INT64(spritedata[++offs]);
+							UINT64 pixels = spritedata[++offs];
+#ifndef LSB_FIRST
+							pixels = BURN_ENDIAN_SWAP_INT64(pixels);
+#endif
 
 							/* draw four pixels */
 							pix = (pixels >> 60) & 0xf; ind = BURN_ENDIAN_SWAP_INT16(indirect[pix]); while (xacc < 0x200) { YBoardDrawPixel(x, ind, colorpri, pPixel); x += xdelta; xacc += zoom; } xacc -= 0x200;
@@ -2612,7 +2615,10 @@ static void YBoardRenderSpriteLayer()
 						offs = addr + 1;
 						for (x = xpos; (xdelta > 0 && x <= maxx) || (xdelta < 0 && x >= minx); )
 						{
-							UINT64 pixels = BURN_ENDIAN_SWAP_INT64(spritedata[--offs]);
+							UINT64 pixels = spritedata[--offs];
+#ifndef LSB_FIRST
+							pixels = BURN_ENDIAN_SWAP_INT64(pixels);
+#endif
 
 							/* draw four pixels */
 							pix = (pixels >>  0) & 0xf; ind = BURN_ENDIAN_SWAP_INT16(indirect[pix]); while (xacc < 0x200) { YBoardDrawPixel(x, ind, colorpri, pPixel); x += xdelta; xacc += zoom; } xacc -= 0x200;
@@ -3044,6 +3050,14 @@ void UpdateSystem18VDP()
 Palette Generation
 ====================================================*/
 
+static INT32 rgbclamp(INT32 in)
+{
+	if (in > 255) in = 255;
+	if (in < 0) in = 0;
+
+	return in;
+}
+
 void System16PaletteInit()
 {
 	static const INT32 resistances_normal[6] = { 3900, 2000, 1000, 1000/2, 1000/4, 0 };
@@ -3063,7 +3077,10 @@ void System16PaletteInit()
 		INT32 i1 = (value >> 1) & 1;
 		INT32 i0 = (value >> 0) & 1;
 		System16PaletteNormal[value] = combine_6_weights(weights_normal, i0, i1, i2, i3, i4, 0);
-		System16PaletteShadow[value] = combine_6_weights(weights_sh, i0, i1, i2, i3, i4, ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_SEGA_OUTRUN) ? 4 : 0);
+
+		// Out Run hw gets slightly darker shadows, to match pcb
+		INT32 c = combine_6_weights(weights_sh, i0, i1, i2, i3, i4, ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_SEGA_OUTRUN) ? -0.30 : 0);
+		System16PaletteShadow[value] = rgbclamp(c);
 		System16PaletteHilight[value] = combine_6_weights(weights_sh, i0, i1, i2, i3, i4, 1);
 	}
 }
@@ -3644,7 +3661,7 @@ INT32 System16BRender()
 			UINT16* pPixel = pSys18SpriteBMP + (y * 320);
 			UINT8*    pPri = pPrioDraw  + (y * nScreenWidth);
 			UINT16*  pDest = pTransDraw + (y * 320);
-			UINT16 *PalRAM = (UINT16*)System16PaletteRam;
+			//UINT16 *PalRAM = (UINT16*)System16PaletteRam;
 
 			UINT16 pix = pPixel[x];
 			INT32 pri = (pix >> 10) & 3;
@@ -3653,7 +3670,8 @@ INT32 System16BRender()
 				if ((1<<pri) > pPri[x]) {
 
 					if ((pix & 0x3f0) == 0x3f0) {
-						pDest[x] += (PalRAM[pPixel[x]] & 0x8000) ? (System16PaletteEntries * 2) : System16PaletteEntries;
+						//pDest[x] += (PalRAM[pPixel[x]] & 0x8000) ? (System16PaletteEntries * 2) : System16PaletteEntries;
+						pDest[x] += System16PaletteEntries; // system16b doesn't have highlight? hmm... saving above for justincase
 					} else {
 						pDest[x] = ((pix & 0x3ff) | System16SpritePalOffset);
 					}

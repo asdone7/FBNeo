@@ -760,6 +760,7 @@ void MenuUpdate()
 			CheckMenuRadioItem(hMenu, MENU_DX9_ALT_POINT, MENU_DX9_ALT_POINT + 1, MENU_DX9_ALT_POINT + bVidDX9Bilinear, MF_BYCOMMAND);
 			CheckMenuItem(hMenu, MENU_DX9_ALT_HARDWAREVERTEX, (bVidHardwareVertex) ? MF_CHECKED : MF_UNCHECKED);
 			CheckMenuItem(hMenu, MENU_DX9_ALT_MOTIONBLUR, (bVidMotionBlur) ? MF_CHECKED : MF_UNCHECKED);
+			CheckMenuRadioItem(hMenu, MENU_DX9_ALT_HARD_FX_NONE, MENU_DX9_ALT_HARD_FX_LAST, MENU_DX9_ALT_HARD_FX_NONE + nVidDX9HardFX, MF_BYCOMMAND);
 			CheckMenuItem(hMenu, MENU_DX9_ALT_FORCE_16BIT, bVidForce16bitDx9Alt ? MF_CHECKED : MF_UNCHECKED);
 			break;
 	}
@@ -1014,6 +1015,7 @@ void MenuUpdate()
 	CheckMenuItem(hMenu, MENU_SAVEHISCORES, EnableHiscores ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(hMenu, MENU_USEBLEND, bBurnUseBlend ? MF_CHECKED : MF_UNCHECKED);
 	CheckMenuItem(hMenu, MENU_GEARSHIFT, BurnShiftEnabled ? MF_CHECKED : MF_UNCHECKED);
+	CheckMenuItem(hMenu, MENU_LIGHTGUNRETICLES, bBurnGunDrawReticles ? MF_CHECKED : MF_UNCHECKED);
 
 #ifdef INCLUDE_AVI_RECORDING
 	if (nAvi3x <= 1) {
@@ -1056,12 +1058,16 @@ void MenuUpdate()
 	CheckMenuItem(hMenu, MENU_SAVEGAMEINPUT, bSaveInputs ? MF_CHECKED : MF_UNCHECKED);
 
 	// Auto-Fire
+	if (nAutoFireRate == 2)  var = MENU_INPUT_AUTOFIRE_RATE_6;
 	if (nAutoFireRate == 4)  var = MENU_INPUT_AUTOFIRE_RATE_5;
 	if (nAutoFireRate == 6)  var = MENU_INPUT_AUTOFIRE_RATE_4;
 	if (nAutoFireRate == 8)  var = MENU_INPUT_AUTOFIRE_RATE_3;
 	if (nAutoFireRate == 12) var = MENU_INPUT_AUTOFIRE_RATE_2;
-	if (nAutoFireRate == 22) var = MENU_INPUT_AUTOFIRE_RATE_1;
-	CheckMenuRadioItem(hMenu, MENU_INPUT_AUTOFIRE_RATE_1, MENU_INPUT_AUTOFIRE_RATE_5, var, MF_BYCOMMAND);
+	if (nAutoFireRate == 24) var = MENU_INPUT_AUTOFIRE_RATE_1;
+	CheckMenuRadioItem(hMenu, MENU_INPUT_AUTOFIRE_RATE_1, MENU_INPUT_AUTOFIRE_RATE_6, var, MF_BYCOMMAND);
+
+	var = MENU_AUDIO_VOLUME_0 + (nAudVolume / 1000);
+	CheckMenuRadioItem(hMenu, MENU_AUDIO_VOLUME_0, MENU_AUDIO_VOLUME_100, var, MF_BYCOMMAND);
 
 #ifdef BUILD_A68K
 	CheckMenuItem(hMenu, MENU_ASSEMBLYCORE, bBurnUseASMCPUEmulation ? MF_CHECKED : MF_UNCHECKED);
@@ -1312,6 +1318,13 @@ void MenuEnableItems()
 		EnableMenuItem(hMenu, MENU_MEMCARD_INSERT,		MF_GRAYED | MF_BYCOMMAND);
 		EnableMenuItem(hMenu, MENU_MEMCARD_EJECT,		MF_GRAYED | MF_BYCOMMAND);
 
+		EnableMenuItem(hMenu, ID_LUA_OPEN,				MF_ENABLED | MF_BYCOMMAND);
+		if (LuaConsoleHWnd) {
+			EnableMenuItem(hMenu, ID_LUA_CLOSE_ALL,		MF_ENABLED | MF_BYCOMMAND);
+		} else {
+			EnableMenuItem(hMenu, ID_LUA_CLOSE_ALL,		MF_GRAYED | MF_BYCOMMAND);
+		}
+
 		if ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_SNK_NEOGEO) {
 			EnableMenuItem(hMenu, MENU_INTERPOLATE_1,				MF_GRAYED | MF_BYCOMMAND);
 			EnableMenuItem(hMenu, MENU_INTERPOLATE_3,				MF_GRAYED | MF_BYCOMMAND);
@@ -1421,6 +1434,8 @@ void MenuEnableItems()
 		bAltPause = 0;
 
 		EnableMenuItem(hMenu, MENU_LOAD,				MF_ENABLED | MF_BYCOMMAND);
+		EnableMenuItem(hMenu, ID_LUA_OPEN,				MF_GRAYED  | MF_BYCOMMAND);
+		EnableMenuItem(hMenu, ID_LUA_CLOSE_ALL,			MF_GRAYED  | MF_BYCOMMAND);
 		EnableMenuItem(hMenu, MENU_MEMCARD_CREATE,		MF_GRAYED  | MF_BYCOMMAND);
 		EnableMenuItem(hMenu, MENU_MEMCARD_SELECT,		MF_GRAYED  | MF_BYCOMMAND);
 		EnableMenuItem(hMenu, MENU_MEMCARD_INSERT,		MF_GRAYED  | MF_BYCOMMAND);

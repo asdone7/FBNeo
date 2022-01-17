@@ -947,8 +947,8 @@ STD_ROM_FN(grdianssy)
 // GOTVG 20210404
 
 static struct BurnRomInfo grdianslbsRomDesc[] = {
-	{ "grdianslbs_u2.bin",	0x080000, 0x1c9955af, BRF_ESS | BRF_PRG },	// 68000 code
-	{ "grdianslbs_u3.bin",	0x080000, 0x3d32f422, BRF_ESS | BRF_PRG },
+	{ "grdianslbs_u2.bin",	0x080000, 0x3edaca8a, BRF_ESS | BRF_PRG },	// 68000 code
+	{ "grdianslbs_u3.bin",	0x080000, 0xc3bc27da, BRF_ESS | BRF_PRG },
 	{ "u4.bin",				0x080000, 0xbb52447b, BRF_ESS | BRF_PRG },
 	{ "u5.bin",				0x080000, 0x9c164a3b, BRF_ESS | BRF_PRG },
 

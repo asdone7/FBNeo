@@ -216,7 +216,6 @@ static int WINAPI gameCallback(char* game, int player, int numplayers)
 	}
 
 	if (!bFound) {
-//		kailleraEndGame();
 		Kaillera_End_Game();
 		return 1;
 	}
@@ -227,9 +226,12 @@ static int WINAPI gameCallback(char* game, int player, int numplayers)
 	bCheatsAllowed = false;								// Disable cheats during netplay
 	AudSoundStop();										// Stop while we load roms
 	DrvInit(nBurnDrvActive, false);						// Init the game driver
-	ScrnInit();
+
+	// w/Kaillera: DrvInit() can't post it's restart message because we're not in the message loop yet.
+	// so we must MediaExit() / MediaInit() here.  -dink
+	MediaExit();
+	MediaInit();
 	AudSoundPlay();										// Restart sound
-	VidInit();
 	SetFocus(hScrnWnd);
 
 //	dprintf(_T(" ** OSD startnet text sent.\n"));
@@ -246,7 +248,6 @@ static int WINAPI gameCallback(char* game, int player, int numplayers)
 	DrvExit();
 	if (kNetGame) {
 		kNetGame = 0;
-//		kailleraEndGame();
 		Kaillera_End_Game();
 	}
 	DeActivateChat();
@@ -299,10 +300,8 @@ static void DoNetGame()
 	ki.moreInfosCallback = NULL;
 
 	Kaillera_Set_Infos(&ki);
-	//kailleraSetInfos(&ki);
 
 	Kaillera_Select_Server_Dialog(NULL);
-	//kailleraSelectServerDialog(NULL);
 
 	if (gameList) {
 		free(gameList);
@@ -952,6 +951,27 @@ void scrnSSUndo() // called from the menu (shift+F8) and CheckSystemMacros() in 
 	}
 }
 
+void ScrnInitLua() {
+	if (UseDialogs()) {
+		if (!LuaConsoleHWnd) {
+			InputSetCooperativeLevel(false, bAlwaysProcessKeyboardInput);
+			LuaConsoleHWnd = CreateDialog(hAppInst, MAKEINTRESOURCE(IDD_LUA), NULL, (DLGPROC)DlgLuaScriptDialog);
+		}
+		else
+		{
+			SetForegroundWindow(LuaConsoleHWnd);
+		}
+	}
+}
+
+void ScrnExitLua() {
+	if (LuaConsoleHWnd) {
+		PostMessage(LuaConsoleHWnd, WM_CLOSE, 0, 0);
+
+		LuaConsoleHWnd = NULL;
+	}
+}
+
 static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 {
 	//if(id >= ID_MDI_START_CHILD) {
@@ -1125,19 +1145,12 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			break;
 
 		case ID_LUA_OPEN:
-			if (UseDialogs()) {
-				if (!LuaConsoleHWnd) {
-					InputSetCooperativeLevel(false, bAlwaysProcessKeyboardInput);
-					LuaConsoleHWnd = FBACreateDialog(hAppInst, MAKEINTRESOURCE(IDD_LUA), hScrnWnd, (DLGPROC)DlgLuaScriptDialog);
-				}
-				else
-					SetForegroundWindow(LuaConsoleHWnd);
-			}
+			ScrnInitLua();
+			MenuEnableItems();
 			break;
 		case ID_LUA_CLOSE_ALL:
-			if (LuaConsoleHWnd) {
-				PostMessage(LuaConsoleHWnd, WM_CLOSE, 0, 0);
-			}
+			ScrnExitLua();
+			MenuEnableItems();
 			break;
 
 #ifdef INCLUDE_AVI_RECORDING
@@ -1168,7 +1181,6 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 				DrvExit();
   				if (kNetGame) {
 					kNetGame = 0;
-//					kailleraEndGame();
 					Kaillera_End_Game();
 					DeActivateChat();
 					PostQuitMessage(0);
@@ -1192,7 +1204,6 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 #endif
 			if (kNetGame) {
 				kNetGame = 0;
-//				kailleraEndGame();
 				Kaillera_End_Game();
 				DeActivateChat();
 			}
@@ -2070,6 +2081,10 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			BurnShiftEnabled = !BurnShiftEnabled;
 			break;
 
+		case MENU_LIGHTGUNRETICLES:
+			bBurnGunDrawReticles = !bBurnGunDrawReticles;
+			break;
+
 #ifdef INCLUDE_AVI_RECORDING
 		case MENU_AVI1X:
 			nAvi3x = 1;
@@ -2223,11 +2238,27 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 			break;
 		}
 
-		case MENU_INPUT_AUTOFIRE_RATE_1: nAutoFireRate = 22; break;
+		case MENU_AUDIO_VOLUME_0:
+		case MENU_AUDIO_VOLUME_10:
+		case MENU_AUDIO_VOLUME_20:
+		case MENU_AUDIO_VOLUME_30:
+		case MENU_AUDIO_VOLUME_40:
+		case MENU_AUDIO_VOLUME_50:
+		case MENU_AUDIO_VOLUME_60:
+		case MENU_AUDIO_VOLUME_70:
+		case MENU_AUDIO_VOLUME_80:
+		case MENU_AUDIO_VOLUME_90:
+		case MENU_AUDIO_VOLUME_100:
+			nAudVolume = (id - MENU_AUDIO_VOLUME_0) * 1000;
+			AudSoundSetVolume();
+			break;
+
+		case MENU_INPUT_AUTOFIRE_RATE_1: nAutoFireRate = 24; break;
 		case MENU_INPUT_AUTOFIRE_RATE_2: nAutoFireRate = 12; break;
 		case MENU_INPUT_AUTOFIRE_RATE_3: nAutoFireRate =  8; break;
 		case MENU_INPUT_AUTOFIRE_RATE_4: nAutoFireRate =  6; break;
 		case MENU_INPUT_AUTOFIRE_RATE_5: nAutoFireRate =  4; break;
+		case MENU_INPUT_AUTOFIRE_RATE_6: nAutoFireRate =  2; break;
 
 		case MENU_PRIORITY_REALTIME: // bad idea, this will freeze the entire system.
 			break;
@@ -3088,6 +3119,17 @@ static void OnCommand(HWND /*hDlg*/, int id, HWND /*hwndCtl*/, UINT codeNotify)
 					POST_INITIALISE_MESSAGE;
 					break;
 
+				case MENU_DX9_ALT_HARD_FX_NONE:
+				case MENU_DX9_ALT_HARD_FX_CRT_APERTURE:
+				case MENU_DX9_ALT_HARD_FX_CRT_CALIGARI:
+				case MENU_DX9_ALT_HARD_FX_CRT_CGWG_FAST:
+				case MENU_DX9_ALT_HARD_FX_CRT_EASY_MODE:
+				case MENU_DX9_ALT_HARD_FX_CRT_STANDARD:
+				case MENU_DX9_ALT_HARD_FX_CRT_BICUBIC:
+				case MENU_DX9_ALT_HARD_FX_CRT_CGA:
+					nVidDX9HardFX = id - MENU_DX9_ALT_HARD_FX_NONE;
+					break;
+
 				case MENU_DX9_ALT_FORCE_16BIT:
 					bVidForce16bitDx9Alt = !bVidForce16bitDx9Alt;
 					POST_INITIALISE_MESSAGE;
@@ -3495,6 +3537,7 @@ int ScrnInit()
 	RECT rect;
 	int nWindowStyles, nWindowExStyles;
 
+	ScrnExitLua();
 	ScrnExit();
 
 	if (ScrnRegister() != 0) {
