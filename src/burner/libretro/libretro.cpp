@@ -865,7 +865,7 @@ static bool open_archive()
 			{
 				index = find_rom_by_name(rom_name, list, count, &real_rom_crc);
 				if (index >= 0)
-					unknown_crc = false;
+					unknown_crc = true;
 			}
 
 			if (index >= 0)
